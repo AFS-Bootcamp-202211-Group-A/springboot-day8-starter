@@ -186,7 +186,7 @@ public class EmployeeServiceTest {
         final int PAGE = 2;
         final int PAGE_SIZE = 2;
         List<Employee> employees = new ArrayList<>();
-        Employee susan = new Employee(1, "Susan", 22, "Female", 10000);
+        Employee susan = new Employee(1, "Susan", 22, "Female`", 10000);
         Employee tom = new Employee(2, "Tom", 23, "Male", 20000);
         Employee sam = new Employee(3, "Sam", 24, "Male", 30000);
         employees.add(susan);
