@@ -1,7 +1,6 @@
 package com.rest.springbootemployee;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ import static org.hamcrest.Matchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class SpringBootEmployeeApplicationTests {
+class EmployeeControllerTest {
 
 	@Autowired
 	MockMvc client;
