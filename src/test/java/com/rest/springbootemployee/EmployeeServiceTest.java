@@ -131,7 +131,7 @@ public class EmployeeServiceTest {
         // given
         int employeeId = 1;
         Employee employee = new Employee(employeeId, "Susan", 22, "Female", 10000);
-        employeeRepository.create(employee);
+        when(employeeRepository.findById(employeeId)).thenReturn(employee);
         // when
         employeeService.delete(employeeId);
         // then

@@ -108,4 +108,18 @@ public class CompanyServiceTest {
 
     }
 
+    @Test
+    void should_delete_company_when_perform_delete_given_companies() {
+        // given
+        int companyId = 1;
+        Company company1 = new Company(companyId, "company1", null);
+        when(companyRepository.findById(companyId)).thenReturn(company1);
+        // when
+        companyService.delete(companyId);
+        // then
+        verify(companyRepository).delete(companyId);
+        List<Company> newCompanies = companyRepository.findAll();
+        assertThat(newCompanies, hasSize(0));
+    }
+
 }
