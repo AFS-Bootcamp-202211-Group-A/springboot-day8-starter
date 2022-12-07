@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -145,6 +146,30 @@ public class CompanyControllerTest {
         Company company = companies.get(0);
         assertEquals("Company2", company.getName());
 
+    }
+
+    @Test
+    void should_get_employee_by_company_id_when_perform_get_by_id_given_companies() throws Exception {
+        //given
+        List<Employee> employeesList1 = Arrays.asList(new Employee(1, "Lily", 20, "Female", 8000),
+                new Employee(2, "Lily2", 21, "Female", 8100));
+        Company company1 = companyRepository.create(new Company(1, "Company1", employeesList1));
+
+        //when
+        //then
+        client.perform(MockMvcRequestBuilders.get("/companies/{id}/employees", company1.getId()))
+                // 1. assert response status
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                // 2. assert response data
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Lily"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].age").value(20))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].gender").value("Female"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].salary").value(8000))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Lily2"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].age").value(21))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].gender").value("Female"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].salary").value(8100));
     }
 
 }
