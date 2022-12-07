@@ -11,6 +11,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -53,6 +56,24 @@ public class CompanyControllerTest {
                         .value("c1"));
     }
     @Test
+    void should_return_employee_list_by_company_id_when_perform_get_employee_list_given_company() throws Exception {
+        //given
+        List<Employee> employeeList = Arrays.asList(
+                new Employee(1, "Lily", 20, "Female", 8000),
+                new Employee(2, "Bob", 11, "Male", 2100));
+        Company company = companyRepository.create(new Company(1, "amazon", employeeList));
+
+        //when & then
+        client.perform(MockMvcRequestBuilders.get("/companies/{id}/employeeList", company.getId()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Lily"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].gender").value("Male"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].salary").value(8000))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].age").value(11));
+    }
+
+    @Test
     void should_return_company_by_page_and_pageSize_when_perform_find_by_page_and_pageSize_given_companies() throws Exception {
         //given
         Integer page = 1;
@@ -67,6 +88,7 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("c2"));
     }
+
 
 
 }
