@@ -132,6 +132,22 @@ class CompanyServiceTest {
 
     }
 
+    @Test
+    void should_delete_company_when_delete_given_company_id(){
+        int companyId = 1;
+        List<Employee> employees = new ArrayList<>();
+        Company company = new Company(companyId, "Dummy Company", employees);
+        companyRepository.create(company);
+
+        companyService.delete(companyId);
+
+        assertThat(companyRepository.findAll(), hasSize(0));
+        verify(companyRepository).delete(companyId);
+
+
+
+    }
+
 
 
 }
