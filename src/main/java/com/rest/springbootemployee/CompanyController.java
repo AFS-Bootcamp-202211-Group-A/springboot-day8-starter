@@ -9,7 +9,7 @@ import java.util.List;
 @RequestMapping("/companies")
 public class CompanyController {
     private CompanyRepository companyRepository;
-    private  CompanyService companyService;
+    private CompanyService companyService;
 
     public CompanyController(CompanyRepository companyRepository, CompanyService companyService) {
         this.companyRepository = companyRepository;
@@ -50,6 +50,6 @@ public class CompanyController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCompany(@PathVariable Integer id) {
-        companyRepository.delete(id);
+        companyService.delete(id);
     }
 }

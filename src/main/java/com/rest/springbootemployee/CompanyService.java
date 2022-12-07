@@ -35,4 +35,8 @@ public class CompanyService {
         }
         return existingCompany;
     }
+
+    public void delete(int id) {
+        companyRepository.delete(id);
+    }
 }
