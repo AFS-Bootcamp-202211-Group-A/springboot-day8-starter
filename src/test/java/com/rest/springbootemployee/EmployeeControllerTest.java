@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -102,7 +103,7 @@ public class EmployeeControllerTest {
     @Test
     void should_add_employee_when_perform_add_given_employees() throws Exception {
         // given
-        Employee susan = employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
+        Employee susan = new Employee(10, "Susan", 22, "Female", 10000);
 
         // when & then
         client.perform(MockMvcRequestBuilders.post("/employees")
@@ -116,6 +117,7 @@ public class EmployeeControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.age").value(22))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.gender").value("Female"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(10000));
+        assertEquals(1, employeeRepository.findAll().size());
     }
     private String asJsonString(final Object obj) {
         try {
