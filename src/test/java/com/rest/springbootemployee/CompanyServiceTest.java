@@ -71,4 +71,18 @@ public class CompanyServiceTest {
         assertEquals(employeeList, result);
     }
 
+    @Test
+    void should_return_company_by_page_and_pageSize_when_perform_find_by_page_and_pageSize_given_companies() {
+        //given
+        List<Company> companies = new ArrayList<>();
+        companies.add(new Company(1,"jpmorgan",null));
+        companies.add(new Company(2,"goldmansach",null));
+        companies.add(new Company(3,"morganstanley",null));
+        when(companyRepository.findByPage(1,3)).thenReturn(companies);
+        //when
+        List<Company> result = this.companyService.findByPage(1,3);
+        //this
+        assertEquals(companies, result);
+    }
+
 }
