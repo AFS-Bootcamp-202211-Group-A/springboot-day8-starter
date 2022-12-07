@@ -100,4 +100,25 @@ public class CompanyServiceTest {
         assertEquals(company.getName(), result.getName());
     }
 
+    @Test
+    void should_update_company_when_update_given_company() {
+        // given
+        List<Employee> employeeList = new  ArrayList<>();
+        employeeList.add(new Employee(1, "john", 11, "Male", 100000));
+        employeeList.add( new Employee(2, "cena", 23, "Male", 2000));
+
+        Company company = new Company(1, "jpm", employeeList);
+
+        Company dummyCompany = new Company(2,"troll",null);
+        List<Company> companyList = new ArrayList<>();
+        companyList.add(company);
+
+        when(companyRepository.findById(1)).thenReturn(company);
+        // when & then
+        Company updatedCompany = companyService.update(1, company);
+        verify(companyRepository).findById(1);
+        assertEquals(company.getName(), updatedCompany.getName());
+        assertEquals(company.getEmployees(), updatedCompany.getEmployees());
+    }
+
 }
