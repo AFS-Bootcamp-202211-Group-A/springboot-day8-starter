@@ -114,15 +114,51 @@ class EmployeeServiceTest {
     void should_return_employee_when_create_given_employee(){
         Employee employee3 = new Employee(1, "Dummy3", 18, "Male", 12000);
 
-        when(employeeRepository.generateNextId()).thenReturn(1);
+        when(employeeRepository.create(employee3)).thenReturn(employee3);
 
         Employee createdEmployee = employeeService.create(employee3);
 
         assertThat(createdEmployee, equalTo(employee3));
 //        assertThat(employeeRepository.employees, hasSize(1));
+        verify(employeeRepository).create(employee3);
+
+    }
+
+    @Test
+    void should_delete_employee_when_delete_given_employee_id(){
 
 
     }
+
+    @Test
+    void should_get_employees_by_page_when_get_by_page_given_page_and_page_size(){
+        //given
+        int page = 1;
+        int pageSize = 2;
+        List<Employee> employees = new ArrayList<>();
+        Employee employee4 = new Employee(11, "Dummy4", 18, "Male", 12000);
+        Employee employee5 = new Employee(12, "Dummy5", 20, "Male", 11000);
+        employees.add(employee4);
+        employees.add(employee5);
+//        employees.add(employee6);
+
+        when(employeeRepository.findByPage(page, pageSize)).thenReturn(employees);
+
+        //when
+        List<Employee> result = employeeService.findByPage(page, pageSize);
+
+        //then
+        assertThat(result, hasSize(2));
+        assertThat(result.get(0), equalTo(employee4));
+        assertThat(result.get(1), equalTo(employee5));
+
+        verify(employeeRepository).findByPage(page, pageSize);
+
+    }
+
+
+
+
 
 
 }

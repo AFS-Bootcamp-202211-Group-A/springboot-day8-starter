@@ -17,10 +17,6 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-    public EmployeeController(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
-    }
-
     @GetMapping
     public List<Employee> getAll() {
         return employeeService.findAll();
@@ -54,7 +50,7 @@ public class EmployeeController {
 
     @GetMapping(params = {"page", "pageSize"})
     public List<Employee> getByPage(int page, int pageSize) {
-        return employeeRepository.findByPage(page, pageSize);
+        return employeeService.findByPage(page, pageSize);
     }
 
 }
