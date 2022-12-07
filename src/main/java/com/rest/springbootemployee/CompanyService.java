@@ -9,6 +9,10 @@ public class CompanyService {
 
     private CompanyRepository companyRepository;
 
+    public CompanyService(CompanyRepository companyRepository) {
+        this.companyRepository = companyRepository;
+    }
+
     public List<Company> findAll() {
         return companyRepository.findAll();
     }
@@ -29,4 +33,9 @@ public class CompanyService {
     public List<Employee> getEmployees(int companyId) {
         return companyRepository.getEmployees(companyId);
     }
+
+    public List<Company> findByPage(Integer page, Integer pageSize){
+        return companyRepository.findByPage(page, pageSize);
+    }
+
 }

@@ -31,6 +31,9 @@ class CompanyControllerTest {
     @Autowired
     CompanyRepository companyRepository;
 
+    @Autowired
+    CompanyService companyService;
+
     @BeforeEach
     void cleanRepository(){companyRepository.clearAll();}
 

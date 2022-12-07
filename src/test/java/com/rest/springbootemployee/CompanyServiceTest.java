@@ -12,7 +12,6 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -90,6 +89,35 @@ class CompanyServiceTest {
         assertThat(retrievedEmployees, equalTo(employees));
 
     }
+
+    @Test
+    void should_return_companies_when_find_by_page_and_page_size_given_companies() {
+        //given
+        int page = 1;
+        int pageSize = 2;
+        List<Employee> employees = new ArrayList<>();
+        List<Company> companies = new ArrayList<>();
+        Company dummyCompany = new Company(2, "Dummy Company", employees);
+        Company dummyCompany2 = new Company(3, "Dummy Company 2", employees);
+        companies.add(dummyCompany);
+        companies.add(dummyCompany2);
+//        companyRepository.create(new Company(12, "Dummy Company 3", employees));
+
+        when(companyRepository.findByPage(page, pageSize)).thenReturn(companies);
+
+        //when
+        List<Company> result = companyService.findByPage(page, pageSize);
+
+        //then
+        assertThat(result, hasSize(2));
+        assertThat(result.get(0), equalTo(dummyCompany));
+        assertThat(result.get(1), equalTo(dummyCompany2));
+
+        verify(companyRepository).findByPage(page, pageSize);
+
+    }
+
+    
 
 
 
