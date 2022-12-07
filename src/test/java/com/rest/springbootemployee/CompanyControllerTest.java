@@ -84,6 +84,21 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].salary").value(13000));
     }
 
+    @Test
+    void should_get_companies_when_get_company_by_page_given_companies() throws Exception {
+        //given
+        companyRepository.create(new Company(1, "Company A", new ArrayList<>()));
+        companyRepository.create(new Company(2, "Company B", new ArrayList<>()));
+
+        //when
+
+        client.perform(MockMvcRequestBuilders.get("/companies?page={page}&pageSize={pageSize}", 1, 2))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Company A"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Company B"));
+    }
+
 
 
 }
