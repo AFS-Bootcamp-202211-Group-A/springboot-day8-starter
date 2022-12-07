@@ -64,7 +64,7 @@ public class CompanyControllerTest {
         Company company = companyRepository.create(new Company(1, "amazon", employeeList));
 
         //when & then
-        client.perform(MockMvcRequestBuilders.get("/companies/{id}/employeeList", company.getId()))
+        client.perform(MockMvcRequestBuilders.get("/companies/{id}/employees", company.getId()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Lily"))

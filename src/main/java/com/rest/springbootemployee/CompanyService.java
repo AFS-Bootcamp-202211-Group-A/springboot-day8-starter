@@ -8,6 +8,9 @@ import java.util.List;
 public class CompanyService {
     CompanyRepository companyRepository;
 
+    public CompanyService(CompanyRepository companyRepository){
+        this.companyRepository = companyRepository;
+    }
     public List<Company> findAll()  {
         return companyRepository.findAll();
     }
