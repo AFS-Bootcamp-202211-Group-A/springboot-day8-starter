@@ -126,4 +126,22 @@ public class CompanyServiceTest {
         //then
         assertEquals(company.getName(), returnedCompany.getName());
     }
+
+    @Test
+    void should_delete_company_when_perform_delete_given_companies() {
+        // given
+        int companyId = 1;
+        List<Employee> employees = Arrays.asList(
+                new Employee(1, "Sam", 20, "Male", 200000),
+                new Employee(2, "Ken", 20, "Male", 200000)
+        );
+        Company company = new Company(companyId, "spring", employees);
+        when(companyRepository.findById(companyId)).thenReturn(company);
+        // when
+        companyService.delete(companyId);
+        // then
+        verify(companyRepository).delete(companyId);
+        List<Company> returnedCompanies = companyRepository.findAll();
+        assertThat(returnedCompanies, hasSize(0));
+    }
 }

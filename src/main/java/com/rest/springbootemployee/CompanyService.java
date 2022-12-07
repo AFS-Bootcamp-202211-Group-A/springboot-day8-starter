@@ -38,4 +38,8 @@ public class CompanyService {
     public Company create(Company company) {
         return companyRepository.create(company);
     }
+
+    public void delete(Integer id) {
+        companyRepository.delete(id);
+    }
 }
