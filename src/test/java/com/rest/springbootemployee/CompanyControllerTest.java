@@ -40,5 +40,18 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("c1"));
     }
 
+    @Test
+    void should_return_company_when_perform_find_by_ID() throws Exception {
+        //given
+        Company company = companyRepository.create(new Company(1, "c1", null));
+        companyRepository.create(new Company(2, "c2", null));
+        //when & then
+        client.perform(MockMvcRequestBuilders.get("/companies/{id}"
+                        ,company.getId()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name")
+                        .value("c1"));
+    }
+
 
 }
