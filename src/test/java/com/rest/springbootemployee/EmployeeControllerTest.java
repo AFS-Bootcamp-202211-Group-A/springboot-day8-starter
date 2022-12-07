@@ -26,6 +26,7 @@ public class EmployeeControllerTest {
     void should_get_all_employees_when_perform_get_given_employees() throws Exception{
         //given
         employeeRepository.create(new Employee(10, "Bob",23, "Male", 5000));
+        employeeRepository.create(new Employee(11, "Clara",13, "Female", 50000));
         //when & should
         client.perform(MockMvcRequestBuilders.get("/employees"))
                 // 1. assert response status
@@ -36,5 +37,21 @@ public class EmployeeControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].age").value(23))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].gender").value("Male"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].salary").value(5000));
+    }
+    @Test
+    void should_get_employee_when_perform_get_id_given_employees_and_ID() throws Exception{
+        //given
+
+        Employee bob = employeeRepository.create(new Employee(10, "Bob",23, "Male", 5000));
+        employeeRepository.create(new Employee(11, "Clara",13, "Female", 50000));
+        //when & should
+        client.perform(MockMvcRequestBuilders.get("/employees/{id}",bob.getId()))
+                // 1. assert response status
+                .andExpect((MockMvcResultMatchers.status().isOk()))
+                // 2. assert response data
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Bob"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.age").value(23))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.gender").value("Male"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(5000));
     }
 }
