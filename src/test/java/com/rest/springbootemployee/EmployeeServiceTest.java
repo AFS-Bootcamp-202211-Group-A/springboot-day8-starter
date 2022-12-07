@@ -94,5 +94,24 @@ public class EmployeeServiceTest {
         assertEquals("Male", foundEmployee.getGender());
         assertEquals(5500, foundEmployee.getSalary());
     }
+    @Test
+    void should_get_employees_when_get_given_employee_gender() {
+        String gender = "Male";
+        List<Employee> employees = new ArrayList<>();
+        Employee employee1 = new Employee(10, "Bob", 20, gender, 5500);
+        Employee employee2 = new Employee(11, "Mary", 20, "Female", 500);
+        employees.add(employee1);
+        employees.add(employee2);
+        List<Employee> expectedEmployees = new ArrayList<>();
+        expectedEmployees.add(employee1);
+        when(employeeRepository.findByGender(gender)).thenReturn(expectedEmployees);
 
+        List<Employee> resultEmployees = employeeService.findByGender(gender);
+
+        verify(employeeRepository).findByGender(gender);
+        assertEquals("Bob", resultEmployees.get(0).getName());
+        assertEquals(20, resultEmployees.get(0).getAge());
+        assertEquals("Male", resultEmployees.get(0).getGender());
+        assertEquals(5500, resultEmployees.get(0).getSalary());
+    }
 }
