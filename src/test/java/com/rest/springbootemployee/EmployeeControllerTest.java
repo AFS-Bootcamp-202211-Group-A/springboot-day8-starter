@@ -13,12 +13,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.List;
-
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
-import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -108,16 +104,13 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    void should_add_employee_when_perform_post_given_new_employee() throws Exception {
+    void should_add_employee_when_perform_add_given_employees() throws Exception {
         // given
         Employee susan = new Employee(10, "Susan", 22, "Female", 10000);
-        // object -> json
-        String newEmployeeJson = new ObjectMapper().writeValueAsString(susan);
-
 
         // when & then
         client.perform(MockMvcRequestBuilders.post("/employees")
-                        .content(newEmployeeJson)
+                        .content(asJsonString(susan))
                         .contentType(MediaType.APPLICATION_JSON))
                 // 1. assert response code
                 .andExpect(MockMvcResultMatchers.status().isCreated())
@@ -127,15 +120,14 @@ public class EmployeeControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.age").value(22))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.gender").value("Female"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(10000));
-
-        List<Employee> employees = employeeRepository.findAll();
-        //assertEquals(1, employeeRepository.findAll().size());
-        assertThat(employees, hasSize(1));
-        Employee employee = employees.get(0);
-        assertThat(employee.getName(), equalTo("Susan"));
-        assertThat(employee.getAge(), equalTo(22));
-        assertThat(employee.getGender(), equalTo("Female"));
-        assertThat(employee.getSalary(), equalTo(10000));
+        assertEquals(1, employeeRepository.findAll().size());
     }
-
+    private String asJsonString(final Object obj) {
+        try {
+            final ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
