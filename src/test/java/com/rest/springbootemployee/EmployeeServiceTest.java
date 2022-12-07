@@ -8,6 +8,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -177,5 +178,37 @@ public class EmployeeServiceTest {
         //2. verify interaction
         //spy
         verify(employeeRepository).delete(employeeId);
+    }
+
+    @Test
+    void should_get_employees_by_page_when_get_by_page_given_employees() {
+        //given
+        final int PAGE = 2;
+        final int PAGE_SIZE = 2;
+        List<Employee> employees = new ArrayList<>();
+        Employee susan = new Employee(1, "Susan", 22, "Female", 10000);
+        Employee tom = new Employee(2, "Tom", 23, "Male", 20000);
+        Employee sam = new Employee(3, "Sam", 24, "Male", 30000);
+        employees.add(susan);
+        employees.add(tom);
+        employees.add(sam);
+
+        when(employeeRepository.findByPage(PAGE, PAGE_SIZE)).thenReturn(
+                employees.stream().skip(2).collect(Collectors.toList())
+        );
+
+        //when
+        List<Employee> returnedEmployee = employeeService.findByPage(PAGE, PAGE_SIZE);
+
+        //then
+        //1. verify data
+        assertThat(returnedEmployee.get(0).getName(), equalTo("Sam"));
+        assertThat(returnedEmployee.get(0).getAge(), equalTo(24));
+        assertThat(returnedEmployee.get(0).getSalary(), equalTo(30000));
+        assertThat(returnedEmployee.get(0).getGender(), equalTo("Male"));
+
+        //2. verify interaction
+        //spy
+        verify(employeeRepository).findByPage(PAGE, PAGE_SIZE);
     }
 }
