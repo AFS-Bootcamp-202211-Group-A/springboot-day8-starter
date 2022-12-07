@@ -131,5 +131,20 @@ public class CompanyControllerTest {
         assertEquals("Company1_updateName", company_update.getName());
     }
 
+    @Test
+    void should_delete_company_when_perform_delete_given_company() throws Exception {
+        // given
+        Company company1 = companyRepository.create(new Company(1, "Company1", null));
+        companyRepository.create(new Company(2, "Company2", null));
+        // when & then
+        client.perform(MockMvcRequestBuilders.delete("/companies/{id}", company1.getId()))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+
+        List<Company> companies = companyRepository.findAll();
+        assertThat(companies, hasSize(1));
+        Company company = companies.get(0);
+        assertEquals("Company2", company.getName());
+
+    }
 
 }
