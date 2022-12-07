@@ -74,4 +74,19 @@ public class CompanyServiceTest {
         assertEquals("Female",employees.get(1).getGender());
         assertEquals(80000,employees.get(1).getSalary());
     }
+    @Test
+    void should_get_companies_when_get_given_page_and_pageSize() {
+        Integer page = 1;
+        Integer pageSize = 1;
+        List<Company> companies = new ArrayList<>();
+        Company company = new Company(100, "spring", new ArrayList<>());
+        companies.add(company);
+        companies.add(new Company(101, "autumn", new ArrayList<>()));
+        when(companyRepository.findByPage(page, pageSize)).thenReturn(companies.subList(0,1));
+
+        List<Company> resultCompanies = companyService.findByPage(page, pageSize);
+
+        verify(companyRepository).findByPage(page, pageSize);
+        assertEquals(companies.subList(0,1),resultCompanies);
+    }
 }
