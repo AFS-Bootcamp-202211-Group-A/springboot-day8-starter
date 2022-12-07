@@ -19,4 +19,8 @@ public class CompanyService {
     public Company findById(int companyId) {
         return companyRepository.findById(companyId);
     }
+
+    public List<Employee> getEmployees(Integer companyId) {
+        return companyRepository.getEmployees(companyId);
+    }
 }

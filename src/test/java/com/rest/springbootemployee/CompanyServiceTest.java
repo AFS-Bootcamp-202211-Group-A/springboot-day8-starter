@@ -72,4 +72,37 @@ public class CompanyServiceTest {
         verify(companyRepository).findById(id);
     }
 
+    @Test
+    void should_get_employees_when_get_employees_by_company_id_given_companies_and_id() {
+        //given
+        ArrayList<Employee> employees = new ArrayList<>();
+        employees.add(new Employee(1, "Lily", 20, "Female", 80000));
+        employees.add(new Employee(2, "Desiree", 20, "Female", 80000));
+
+        int id = 1;
+        Company company = new Company(1, "Company", employees);
+
+        when(companyRepository.getEmployees(id)).thenReturn(company.getEmployees());
+
+        //when
+        List<Employee> returnedEmployees = companyService.getEmployees(id);
+
+        //then
+        //1. verify data
+        assertThat(returnedEmployees, hasSize(2));
+        assertThat(returnedEmployees.get(0).getName(), equalTo("Lily"));
+        assertThat(returnedEmployees.get(0).getAge(), equalTo(20));
+        assertThat(returnedEmployees.get(0).getGender(), equalTo("Female"));
+        assertThat(returnedEmployees.get(0).getSalary(), equalTo(80000));
+        assertThat(returnedEmployees.get(1).getName(), equalTo("Desiree"));
+        assertThat(returnedEmployees.get(1).getAge(), equalTo(20));
+        assertThat(returnedEmployees.get(1).getGender(), equalTo("Female"));
+        assertThat(returnedEmployees.get(1).getSalary(), equalTo(80000));
+
+        //2. verify interaction
+        //spy
+        verify(companyRepository).getEmployees(id);
+    }
+
+
 }
