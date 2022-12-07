@@ -12,6 +12,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -49,5 +50,35 @@ public class EmployeeServiceTest {
         //2. verify interaction
         //spy
         verify(employeeRepository).findAll();
+    }
+
+    //1. verify interaction
+    // when EmployeeService.findAll is called, it will call employeeRepository.findById()
+    // 2. verify data
+    // when input an employee, only the age and salary will be changed, name and gender remain unchanged
+    @Test
+    void should_update_only_age_and_salary_when_update_all_given_employees() {
+        //given
+        int employeeId = 1;
+        Employee employee = new Employee(employeeId, "Susan", 22, "Female", 10000);
+        Employee toUpdateEmployee = new Employee(employeeId, "Tom", 23, "Male", 12000);
+
+        when(employeeRepository.findById(employeeId)).thenReturn(employee);
+
+        //when
+        Employee updatedEmployee = employeeService.update(employeeId, toUpdateEmployee);
+
+        //then
+        //1. verify data age, salary
+        //will change
+        assertThat(updatedEmployee.getAge(), equalTo(23));
+        assertThat(updatedEmployee.getSalary(), equalTo(12000));
+        //will not change
+        assertThat(updatedEmployee.getName(), equalTo("Susan"));
+        assertThat(updatedEmployee.getGender(), equalTo("Female"));
+
+        //2. verify interaction
+        //spy
+        verify(employeeRepository).findById(employeeId);
     }
 }
