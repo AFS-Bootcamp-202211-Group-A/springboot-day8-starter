@@ -58,9 +58,7 @@ public class EmployeeServiceTest {
     @Test
     void should_get_employee_by_id_when_perform_get_by_id_through_service_given_employees() {
         // given
-        List<Employee> employees = new ArrayList<>();
         Employee employee = new Employee(10, "Susan", 22, "Female", 10000);
-        employees.add(employee);
         when(employeeRepository.findById(employee.getId())).thenReturn(employee);
         // when
         Employee result = employeeService.findById(employee.getId());
