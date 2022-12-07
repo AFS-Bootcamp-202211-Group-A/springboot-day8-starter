@@ -30,7 +30,7 @@ public class CompanyControllerTest {
     }
 
     @Test
-    void should_get_all_employees_when_perform_get_given_employees() throws Exception {
+    void should_get_all_companies_when_perform_get_given_companies() throws Exception {
         //given
         Employee susan = new Employee(1, "Susan", 22, "Female", 10000);
         Employee tom = new Employee(2, "Tom", 23, "Male", 20000);
@@ -78,12 +78,33 @@ public class CompanyControllerTest {
 
         client.perform(MockMvcRequestBuilders.get("/companies/{id}/employees", spring.getId()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").isNumber())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].id").isNumber())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[*].name", containsInAnyOrder("Susan", "Tom")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[*].age", containsInAnyOrder(22, 23)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[*].salary", containsInAnyOrder(10000, 20000)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[*].gender", containsInAnyOrder("Female", "Male")));
+
+        //then
+    }
+
+    @Test
+    void should_get_companies_in_page_when_get_companies_by_page_given_companies() throws Exception{
+        //given
+        Employee susan = new Employee(1, "Susan", 22, "Female", 10000);
+        Employee tom = new Employee(2, "Tom", 23, "Male", 20000);
+        Employee sam = new Employee(3, "Sam", 24, "Male", 30000);
+        Company spring = companyRepository.create(new Company(1, "spring", new ArrayList<>(Arrays.asList(susan, tom)) ));
+        companyRepository.create(new Company(2, "boot",  new ArrayList<>(Arrays.asList(sam))));
+        //when
+
+
+        client.perform(MockMvcRequestBuilders.get("/companies?page={page}&pageSize={pageSize}", 2,1))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("boot"));
 
         //then
     }
