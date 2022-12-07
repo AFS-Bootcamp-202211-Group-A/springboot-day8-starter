@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler({NoEmployeeFoundException.class, NoCompanyFoundException.class})
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseData method() {
-        return new ResponseData("400", "resource not found");
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public void method() {
     }
 }
