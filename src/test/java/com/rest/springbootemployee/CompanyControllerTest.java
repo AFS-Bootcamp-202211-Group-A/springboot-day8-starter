@@ -18,6 +18,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
+import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -79,5 +80,33 @@ public class CompanyControllerTest {
 
         //then
     }
+
+    @Test
+    void should_add_company_when_perform_post_given_new_company() throws Exception {
+        // given
+        Company company1 = new Company(1, "Company1", null);
+        // object -> json
+        String newcompany1Json = new ObjectMapper().writeValueAsString(company1);
+
+
+        // when & then
+        client.perform(MockMvcRequestBuilders.post("/companies")
+                .content(newcompany1Json)
+                .contentType(MediaType.APPLICATION_JSON))
+                // 1. assert response code
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                // 2. assert response data
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Company1"));
+
+
+        List<Company> companies = companyRepository.findAll();
+        //assertEquals(1, employeeRepository.findAll().size());
+        assertThat(companies, hasSize(1));
+        Company company = companies.get(0);
+        assertThat(company.getName(), equalTo("Company1"));
+
+    }
+
 
 }
