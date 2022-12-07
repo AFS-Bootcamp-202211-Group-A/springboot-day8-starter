@@ -163,7 +163,22 @@ class CompanyControllerTest {
     }
 
     @Test
-    void should_delete_company_when_perform_delete_given_companies() {
+    void should_delete_company_when_perform_delete_given_companies() throws Exception {
+        //given
+        ArrayList<Employee> employees = new ArrayList<>();
+        Company company = companyRepository.create(new Company(10, "Dummy Company", employees));
+
+        //when&then
+        client.perform(MockMvcRequestBuilders.delete("/employees/{id}", company.getId()))
+                // 1. assert response status
+                .andExpect(MockMvcResultMatchers.status().isNoContent())
+                // 2. assert response data
+                .andDo(print());
+
+        //then
+        List<Company> companies = companyRepository.findAll();
+        assertThat(employees, hasSize(0));
+
     }
 
     public static String asJsonString(final Object obj) {
