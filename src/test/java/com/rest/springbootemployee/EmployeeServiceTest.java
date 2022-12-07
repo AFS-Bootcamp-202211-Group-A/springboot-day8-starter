@@ -80,5 +80,19 @@ public class EmployeeServiceTest {
         verify(employeeRepository).delete(employeeId);
         assertEquals(0, employeeService.findAll().size());
     }
+    @Test
+    void should_get_employee_when_get_given_employee_id(){
+        Integer id = 10;
+        Employee employee = new Employee(id, "Bob", 20, "Male", 5500);
+        when(employeeRepository.findById(id)).thenReturn(employee);
+
+        Employee foundEmployee = employeeService.findById(id);
+
+        verify(employeeRepository).findById(id);
+        assertEquals("Bob", foundEmployee.getName());
+        assertEquals(20, foundEmployee.getAge());
+        assertEquals("Male", foundEmployee.getGender());
+        assertEquals(5500, foundEmployee.getSalary());
+    }
 
 }
