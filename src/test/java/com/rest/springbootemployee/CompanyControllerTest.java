@@ -108,5 +108,28 @@ public class CompanyControllerTest {
 
     }
 
+    @Test
+    void should_update_company_when_perform_put_given_employee_with_id() throws Exception {
+        // given
+
+        Company updatedCompany1 = new Company(1, "Company1_updateName", null);
+        Company company1 = companyRepository.create(new Company(1, "Company1", null));
+        // when & then
+        String updateCompany1Json = new ObjectMapper().writeValueAsString(updatedCompany1);
+        client.perform(MockMvcRequestBuilders.put("/companies/{id}", company1.getId())
+                .content(updateCompany1Json)
+                .contentType(MediaType.APPLICATION_JSON))
+                // 1. assert response code
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                // 2. assert response data
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Company1_updateName"));
+
+        List<Company> companies = companyRepository.findAll();
+        assertThat(companies, hasSize(1));
+        Company company_update = companies.get(0);
+        assertEquals("Company1_updateName", company_update.getName());
+    }
+
 
 }
