@@ -44,6 +44,38 @@ class CompanyServiceTest {
 
     }
 
+    @Test
+    void should_update_only_name_when_update_all_given_companies() {
+        int companyId = 1;
+        List<Employee> employees = new ArrayList<>();
+        Company company = new Company(companyId, "Dummy Company", employees);
+        Company toUpdateCompany = new Company(companyId, "Dummy Company Updated", employees);
+
+        when(companyRepository.findById(companyId)).thenReturn(company);
+
+        Company updatedCompany = companyService.update(companyId, toUpdateCompany);
+
+        verify(companyRepository).findById(companyId);
+        assertThat(updatedCompany.getName(), equalTo("Dummy Company Updated"));
+
+
+    }
+
+    @Test
+    void should_return_company_by_id_when_find_by_id_given_companies(){
+        int companyId = 1;
+        List<Employee> employees = new ArrayList<>();
+        Company company = new Company(companyId, "Dummy Company", employees);
+
+        when(companyRepository.findById(companyId)).thenReturn(company);
+
+        Company companyById = companyService.finById(companyId);
+        assertThat(companyById.getName(), equalTo("Dummy Company"));
+
+
+
+    }
+
 
 
 }
