@@ -23,4 +23,8 @@ public class CompanyService {
         }
         return existingCompany;
     }
+
+    public Company findById(int companyId) {
+        return companyRepository.findById(companyId);
+    }
 }

@@ -47,6 +47,27 @@ public class CompanyServiceTest {
     }
 
     @Test
+    void should_return_company_with_id_when_find_by_id_given_company() {
+        //given
+        int companyId = 1;
+        Company company = new Company(companyId, "spring", new ArrayList<>());
+
+        when(companyRepository.findById(companyId)).thenReturn(company);
+
+        //when
+        Company expectedCompany = companyService.findById(companyId);
+
+        //then
+        //1. verify data age, salary
+        assertThat(expectedCompany.getId(), equalTo(companyId));
+        assertThat(expectedCompany.getName(), equalTo("spring"));
+
+        //2. verify interaction
+        //spy
+        verify(companyRepository).findById(companyId);
+    }
+
+    @Test
     void should_update_only_name_when_update_given_company() {
         //given
         final int companyId = 1;
