@@ -104,4 +104,30 @@ public class EmployeeServiceTest {
         //spy
         verify(employeeRepository).findById(employeeId);
     }
+
+    @Test
+    void should_return_employees_with_correct_gender_when_find_by_gender_given_employees() {
+        //given
+        String gender= "female";
+        List<Employee> employees = new ArrayList<>();
+        Employee employee = new Employee(10, "Susan", 22, "female", 10000);
+        employees.add(employee);
+
+        when(employeeRepository.findByGender(gender)).thenReturn(employees);
+
+        //when
+        List<Employee> returnedEmployees = employeeService.findByGender(gender);
+
+        //then
+        //1. verify data age, salary
+        assertThat(returnedEmployees.size(), equalTo(1));
+        assertThat(returnedEmployees.get(0).getAge(), equalTo(22));
+        assertThat(returnedEmployees.get(0).getSalary(), equalTo(10000));
+        assertThat(returnedEmployees.get(0).getName(), equalTo("Susan"));
+        assertThat(returnedEmployees.get(0).getGender(), equalTo("female"));
+
+        //2. verify interaction
+        //spy
+        verify(employeeRepository).findByGender(gender);
+    }
 }
