@@ -51,4 +51,25 @@ public class CompanyServiceTest {
         verify(companyRepository).findAll();
     }
 
+    @Test
+    void should_return_company_with_corresponding_id_when_find_by_id_given_companies() {
+        //given
+        int id = 1;
+        Company companyA = new Company(id, "Company A", new ArrayList<>());
+
+        when(companyRepository.findById(id)).thenReturn(companyA);
+
+        //when
+        Company expectedCompany = companyService.findById(id);
+
+        //then
+        //1. verify data age, salary
+        assertThat(expectedCompany.getId(), equalTo(id));
+        assertThat(expectedCompany.getName(), equalTo("Company A"));
+
+        //2. verify interaction
+        //spy
+        verify(companyRepository).findById(id);
+    }
+
 }

@@ -15,4 +15,8 @@ public class CompanyService {
     public List<Company> findAll() {
         return companyRepository.findAll();
     }
+
+    public Company findById(int companyId) {
+        return companyRepository.findById(companyId);
+    }
 }
