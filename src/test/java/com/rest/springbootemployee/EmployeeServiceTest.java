@@ -113,4 +113,21 @@ public class EmployeeServiceTest {
         assertEquals(bob, results.get(1));
 
     }
+
+    @Test
+    void should_add_employee_when_perform_through_service_add_given_employees() throws Exception {
+        //given
+        Employee susan = new Employee(10, "Susan", 22, "Female", 10000);
+        //Employee susan = employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
+
+        when(employeeRepository.create(susan)).thenReturn(susan);
+
+        //when
+        Employee result = employeeService.create(susan);
+
+        //then
+        verify(employeeRepository).create(susan);
+        assertEquals(susan, result);
+
+    }
 }
