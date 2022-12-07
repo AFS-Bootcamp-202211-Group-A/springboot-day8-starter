@@ -85,4 +85,19 @@ public class CompanyServiceTest {
         assertEquals(companies, result);
     }
 
+    @Test
+    void should_create_company_when_perform_create_given_company_detail() {
+        //given
+        List<Employee> employeeList = new  ArrayList<>();
+        employeeList.add(new Employee(1, "john", 11, "Male", 100000));
+        employeeList.add( new Employee(2, "cena", 23, "Male", 2000));
+        Company company = new Company(1, "jpm", employeeList);
+
+        when(this.companyRepository.create(company)).thenReturn(company);
+        //when
+        Company result = this.companyService.create(company);
+        //then
+        assertEquals(company.getName(), result.getName());
+    }
+
 }
