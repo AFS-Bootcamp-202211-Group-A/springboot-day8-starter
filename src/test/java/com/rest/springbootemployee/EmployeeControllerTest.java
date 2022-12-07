@@ -29,9 +29,10 @@ public class EmployeeControllerTest {
     @Autowired
     EmployeeRepository employeeRepository;
 
+
     @BeforeEach
     void cleanRepository() {
-        employeeRepository.clearAll();
+            employeeRepository.clearAll();
     }
 
     @Test
@@ -183,4 +184,5 @@ public class EmployeeControllerTest {
         assertEquals("Male", employee.getGender());
         assertEquals(20000, employee.getSalary());
     }
+
 }
