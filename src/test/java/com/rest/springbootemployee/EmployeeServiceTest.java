@@ -153,4 +153,29 @@ public class EmployeeServiceTest {
         //spy
         verify(employeeRepository).create(employee);
     }
+
+    @Test
+    void should_delete_employee_when_delete_given_id() {
+        //given
+        int employeeId = 1;
+        List<Employee> employees = new ArrayList<>();
+        Employee employee1 = new Employee(employeeId, "Susan", 22, "female", 10000);
+        employees.add(employee1);
+
+        when(employeeRepository.findAll()).thenReturn(employees).thenReturn(new ArrayList<>());
+
+        //when
+        List<Employee> result = employeeService.findAll();
+        employeeService.delete(employeeId);
+        List<Employee> deletedResult = employeeService.findAll();
+
+        //then
+        //1. verify data
+        assertThat(result, hasSize(1));
+        assertThat(deletedResult, hasSize(0));
+
+        //2. verify interaction
+        //spy
+        verify(employeeRepository).delete(employeeId);
+    }
 }
