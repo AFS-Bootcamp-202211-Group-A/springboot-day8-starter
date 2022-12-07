@@ -37,4 +37,21 @@ public class EmployeeServiceTest {
         assertEquals(employee, results.get(0));
         verify(employeeRepository).findAll();
     }
+    @Test
+    void should_update_age_and_salary_only_when_update_all_given_employees() {
+        // given
+        int employeeId = 1;
+        Employee employee = new Employee(employeeId, "Susan", 22, "Female", 10000);
+        Employee toUpdateEmployee = new Employee(employeeId, "Lucy", 23, "Female", 2000);
+        List<Employee> employees = new ArrayList<>();
+        employees.add(employee);
+        when(employeeRepository.findById(employeeId)).thenReturn(employee);
+        // when & then
+        Employee updatedEmployee = employeeService.update(employeeId, toUpdateEmployee);
+        verify(employeeRepository).findById(employeeId);
+        assertEquals(toUpdateEmployee.getAge(), updatedEmployee.getAge());
+        assertEquals(toUpdateEmployee.getSalary(), updatedEmployee.getSalary());
+        assertEquals(employee.getName(), updatedEmployee.getName());
+        assertEquals(employee.getGender(), updatedEmployee.getGender());
+    }
 }
