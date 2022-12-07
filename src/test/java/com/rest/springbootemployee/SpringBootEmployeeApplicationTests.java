@@ -46,4 +46,19 @@ class SpringBootEmployeeApplicationTests {
 	    //then
 	}
 
+	@Test
+	void should_get_employee_when_perform_get_by_id_given_employees() throws Exception {
+		//given
+		Employee employee = employeeRepository.create(new Employee(1, "Susan", 20, "Female", 10000));
+		//when
+		client.perform(MockMvcRequestBuilders.get("/employees/{id}", employee.getId()))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Susan"))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.age").value(20))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.gender").value("Female"))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(10000));
+
+		//then
+	}
+
 }
