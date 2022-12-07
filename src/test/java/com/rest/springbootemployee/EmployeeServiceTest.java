@@ -78,6 +78,34 @@ public class EmployeeServiceTest {
     }
 
     @Test
+    void should_get_employees_when_perform_get_given_employees_and_page_and_pageSize(){
+        Integer page = 1;
+        Integer pageSize = 2;
+        Employee oldBob = new Employee(1, "Bob", 20, "Male", 0);
+        Employee bobe = new Employee(2, "Bobe", 23, "Female", 5000);
+        Employee alice = new Employee(3, "Alcie", 33, "Female", 5000);
+
+        employeeRepository.create(oldBob);
+        employeeRepository.create(bobe);
+        employeeRepository.create(alice);
+
+        List<Employee> expectedEmployeeList = new ArrayList<>();
+        expectedEmployeeList.add(oldBob);
+        expectedEmployeeList.add(bobe);
+
+        when(employeeRepository.findByPage(page,pageSize)).thenReturn(expectedEmployeeList);
+        //when
+        List<Employee> result = employeeService.findByPage(page,pageSize);
+        //then
+        verify(employeeRepository).findByPage(page,pageSize);
+        assertEquals(23, result.get(1).getAge());
+        assertEquals(0, result.get(0).getSalary());
+        assertEquals("Bobe", result.get(1).getName());
+        assertEquals("Male", result.get(0).getGender());
+
+    }
+
+    @Test
     void should_update_employee_when_put_given_employee_id() {
         //given
         Integer id = 10;
@@ -124,4 +152,6 @@ public class EmployeeServiceTest {
         List<Employee> updatedEmployeeList = employeeRepository.findAll();
         assertEquals(updatedEmployeeList.size(),0);
     }
+
+
 }
