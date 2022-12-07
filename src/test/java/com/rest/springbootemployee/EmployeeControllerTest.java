@@ -165,4 +165,22 @@ public class EmployeeControllerTest {
         assertEquals("Female", employee.getGender());
         assertEquals(30000, employee.getSalary());
     }
+
+    @Test
+    void should_delete_employee_when_perform_delete_given_employees() throws Exception {
+        // given
+        Employee susan = employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
+        employeeRepository.create(new Employee(11, "Bob", 23, "Male", 20000));
+        // when & then
+        client.perform(MockMvcRequestBuilders.delete("/employees/{id}", susan.getId()))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+
+        List<Employee> employees = employeeRepository.findAll();
+        assertThat(employees, hasSize(1));
+        Employee employee = employees.get(0);
+        assertEquals("Bob", employee.getName());
+        assertEquals(23, employee.getAge());
+        assertEquals("Male", employee.getGender());
+        assertEquals(20000, employee.getSalary());
+    }
 }
