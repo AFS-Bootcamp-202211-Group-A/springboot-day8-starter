@@ -35,4 +35,8 @@ public class CompanyService {
     public void delete(int companyId) {
         companyRepository.delete(Integer.valueOf(companyId));
     }
+
+    public List<Company> findByPage(int page, int page_size) {
+        return  companyRepository.findByPage(page, page_size);
+    }
 }

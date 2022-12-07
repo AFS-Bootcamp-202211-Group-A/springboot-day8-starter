@@ -7,7 +7,9 @@ import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -65,6 +67,36 @@ public class CompanyServiceTest {
         //2. verify interaction
         //spy
         verify(companyRepository).findById(companyId);
+    }
+
+    @Test
+    void should_get_companies_by_page_when_get_by_page_given_companies() {
+        //given
+        final int PAGE = 2;
+        final int PAGE_SIZE = 2;
+        Employee susan = new Employee(1, "Susan", 22, "Female", 10000);
+        Employee tom = new Employee(2, "Tom", 23, "Male", 20000);
+        Employee sam = new Employee(3, "Sam", 24, "Male", 30000);
+        Company spring = new Company(1, "spring", new ArrayList<>(Arrays.asList(susan)));
+        Company boot = new Company(2, "boot",  new ArrayList<>(Arrays.asList(tom)));
+        Company java = new Company(3, "java",  new ArrayList<>(Arrays.asList(sam)));
+        List<Company> companies = new ArrayList<>(Arrays.asList(spring, boot, java));
+
+        when(companyRepository.findByPage(PAGE, PAGE_SIZE)).thenReturn(
+                companies.stream().skip(2).collect(Collectors.toList())
+        );
+
+        //when
+        List<Company> returnedCompanies = companyService.findByPage(PAGE, PAGE_SIZE);
+
+        //then
+        //1. verify data
+        assertThat(returnedCompanies.get(0).getName(), equalTo("java"));
+        assertThat(returnedCompanies.get(0).getId(), equalTo(java.getId()));
+
+        //2. verify interaction
+        //spy
+        verify(companyRepository).findByPage(PAGE, PAGE_SIZE);
     }
 
     @Test
