@@ -146,7 +146,22 @@ public class CompanyControllerTest {
 
     }
 
+    @Test
+    void should_delete_company_when_delete_given_companies_and_id() throws Exception {
+        //given
+        List<Employee> employees = new ArrayList<>();
+        Company company = new Company(10, "Company", employees);
+        companyRepository.create(company);
 
+        //when&then
+        client.perform(MockMvcRequestBuilders.delete("/companies/{id}", company.getId()))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+
+        //then
+        List<Company> companies = companyRepository.findAll();
+        assertThat(companies, empty());
+
+    }
 
 
     public static String asJsonString(final Object obj) throws JsonProcessingException {
