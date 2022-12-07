@@ -104,5 +104,34 @@ public class CompanyServiceTest {
         verify(companyRepository).getEmployees(id);
     }
 
+    @Test
+    void should_get_companies_when_get_given_companies_pageSize_and_page() {
+        //given
+        int page = 2;
+        int pageSize = 2;
+        List<Company> companies = new ArrayList<>();
+        Company companyA = new Company(1, "Company A", new ArrayList<>());
+        Company companyB = new Company(2, "Company B", new ArrayList<>());
+        companies.add(companyA);
+        companies.add(companyB);
+
+        when(companyRepository.findByPage(page, pageSize)).thenReturn(companies);
+
+        //when
+        List<Company> returnedCompanies = companyService.findByPage(page, pageSize);
+
+        //then
+        //1. verify data
+        assertThat(returnedCompanies.size(), equalTo(2));
+        assertThat(returnedCompanies.get(0).getId(), equalTo(1));
+        assertThat(returnedCompanies.get(1).getId(), equalTo(2));
+        assertThat(returnedCompanies.get(0).getName(), equalTo("Company A"));
+        assertThat(returnedCompanies.get(1).getName(), equalTo("Company B"));
+
+        //2. verify interaction
+        //spy
+        verify(companyRepository).findByPage(page, pageSize);
+    }
+
 
 }
