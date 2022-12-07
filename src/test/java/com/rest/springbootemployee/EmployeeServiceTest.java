@@ -113,4 +113,18 @@ public class EmployeeServiceTest {
         assertEquals(bob, results.get(1));
 
     }
+    @Test
+    void should_delete_employee_when_perform_delete_given_employees() {
+        // given
+        int employeeId = 1;
+        List<Employee> employees = new ArrayList<>();
+        Employee employee = new Employee(employeeId, "Susan", 22, "Female", 10000);
+        employees.add(employee);
+        // when
+        employeeService.delete(employeeId);
+        // then
+        verify(employeeRepository).delete(employeeId);
+        List<Employee> newEmployees = employeeRepository.findAll();
+        assertThat(newEmployees, hasSize(0));
+    }
 }
