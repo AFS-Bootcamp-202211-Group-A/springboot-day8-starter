@@ -5,10 +5,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -105,5 +108,20 @@ public class EmployeeServiceTest {
 //        verify
         verify(employeeRepository).create(bob);
         assertEquals(result, bob);
+    }
+
+    @Test
+    void should_delete_employee_when_perform_delete_given_employees_id() {
+        //given
+        Integer id = 1;
+        Employee bob = new Employee(1, "Bob", 23, "Male", 5000);
+        employeeRepository.create(bob);
+//        when
+        employeeService.delete(id);
+//        verify
+        verify(employeeRepository).delete(id);
+
+        List<Employee> updatedEmployeeList = employeeRepository.findAll();
+        assertEquals(updatedEmployeeList.size(),0);
     }
 }
