@@ -65,6 +65,25 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("employees").isArray());
     }
 
+    @Test
+    void should_get_employees_when_get_employees_given_company_id() throws Exception {
+        //given
+        List<Employee> employees = new ArrayList<>();
+        employees.add(new Employee(10, "Tom", 22, "Male", 13000));
+        Company company = companyRepository.create(new Company(10, "Company", employees));
+
+        //when
+
+        client.perform(MockMvcRequestBuilders.get("/companies/{id}/employees", company.getId()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Tom"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].age").value(22))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].gender").value("Male"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].salary").value(13000));
+    }
+
 
 
 }
