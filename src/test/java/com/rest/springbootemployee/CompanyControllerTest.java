@@ -49,7 +49,6 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").isNumber())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[*].name", containsInAnyOrder("Company1", "Company2")));
     }
-
     @Test
     void should_get_company_by_id_when_perform_get_by_id_given_company() throws Exception {
         //given
@@ -61,6 +60,23 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 // 2. assert response data
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Company1"));
+        //then
+    }
+
+    @Test
+    void should_get_company_by_page_and_pageSize_when_perform_get_by_page_and_pageSize_given_companies_and_page_and_pageSize() throws Exception {
+        //given
+        Company company1 = companyRepository.create(new Company(1, "Company1", null));
+        Company company2 = companyRepository.create(new Company(2, "Company2", null));
+
+        //when
+        client.perform(MockMvcRequestBuilders.get("/companies?page={page}&pageSize={pageSize}", 1, 2))
+                // 1. assert response status
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                // 2. assert response data
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[*].name", containsInAnyOrder("Company1", "Company2")));
+
         //then
     }
 
