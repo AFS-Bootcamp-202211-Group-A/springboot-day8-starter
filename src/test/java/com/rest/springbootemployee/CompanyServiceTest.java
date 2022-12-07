@@ -92,5 +92,20 @@ public class CompanyServiceTest {
 
     }
 
+    @Test
+    void should_add_company_when_perform_through_service_add_given_companies() {
+        //given
+        Company company1 = new Company(1, "company1", null);
+
+        when(companyRepository.create(company1)).thenReturn(company1);
+
+        //when
+        Company result = companyService.create(company1);
+
+        //then
+        verify(companyRepository).create(company1);
+        assertEquals(company1, result);
+
+    }
 
 }
