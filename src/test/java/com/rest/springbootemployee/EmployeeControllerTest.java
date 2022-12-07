@@ -47,6 +47,23 @@ public class EmployeeControllerTest {
     }
 
     @Test
+    void should_get_employee_by_id_when_perform_get_by_id_given_employees() throws Exception {
+        //given
+        Employee jenny = employeeRepository.create(new Employee(10, "Jenny", 22, "Female", 10000));
+        employeeRepository.create(new Employee(11, "Ken", 22, "Male", 20000));
+        //when
+        client.perform(MockMvcRequestBuilders.get("/employees/{id}", jenny.getId()))
+                // 1. assert response status
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                // 2. assert response data
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Jenny"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.age").value(22))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.gender").value("Female"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(10000));
+        //then
+    }
+
+    @Test
     void should_get_employee_by_gender_when_perform_get_by_gender_given_employees() throws Exception {
         // given
         Employee susan = employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
