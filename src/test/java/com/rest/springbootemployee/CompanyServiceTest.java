@@ -1,10 +1,13 @@
 package com.rest.springbootemployee;
 
+import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -68,5 +71,22 @@ public class CompanyServiceTest {
         verify(companyRepository).findById(companyId);
         assertEquals(toUpdateCompany.getName(), updatedCompany.getName());
         assertEquals(company.getEmployees(), updatedCompany.getEmployees());
+    }
+
+    @Test
+    void should_return_employees_when_perform_find_by_employee_given_companies() {
+        //given
+        int companyId = 1;
+        List<Employee> employees = Arrays.asList(
+                new Employee(1, "Sam", 20, "Male", 200000),
+                new Employee(2, "Ken", 20, "Male", 200000)
+        );
+        Company company = new Company(companyId, "spring", employees);
+        when(companyRepository.findById(companyId)).thenReturn(company);
+        when(companyRepository.getEmployees(companyId)).thenReturn(employees);
+        //when
+        List<Employee> returnedEmployees = this.companyService.getEmployees(1);
+        //then
+        assertEquals(employees, returnedEmployees);
     }
 }
