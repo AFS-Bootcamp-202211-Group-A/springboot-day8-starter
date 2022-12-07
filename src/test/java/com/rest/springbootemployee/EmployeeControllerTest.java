@@ -11,8 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -95,7 +94,29 @@ public class EmployeeControllerTest {
         }
     }
 
+    @Test
+    void should_get_employee_by_page_when_perform_get_given_employees() {
+        //given
+        Employee susan = employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
+        employeeRepository.create(new Employee(11, "Bob", 20, "Male", 10550));
+        employeeRepository.create(new Employee(12, "Mary", 20, "Male", 10550));
 
+
+        //when
+        try {
+            client.perform(MockMvcRequestBuilders.get("/employees?page={page}&pageSize={pageSize}", 1, 2))
+                    // 1. assert response status
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
+                    // 2. assert response data
+//                    .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Bob"))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$[*].name", contains("Susan", "Bob")))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$[*].age", contains(22, 20)))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$[*].salary", contains(10000, 10550)));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
 
