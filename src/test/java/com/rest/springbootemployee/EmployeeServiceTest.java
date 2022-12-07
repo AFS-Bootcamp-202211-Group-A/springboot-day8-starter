@@ -61,14 +61,13 @@ public class EmployeeServiceTest {
         Employee employee = new Employee(10, "Susan", 22, "Female", 10000);
         when(employeeRepository.findById(employee.getId())).thenReturn(employee);
         // when
-        employeeService.findById(employee.getId());
+        Employee returnedEmployee = employeeService.findById(employee.getId());
         // then
-
         verify(employeeRepository).findById(employee.getId());
-        assertEquals(employee.getAge(), 22);
-        assertEquals(employee.getSalary(), 10000);
-        assertEquals(employee.getName(), "Susan");
-        assertEquals(employee.getGender(), "Female");
+        assertEquals(returnedEmployee.getAge(), 22);
+        assertEquals(returnedEmployee.getSalary(), 10000);
+        assertEquals(returnedEmployee.getName(), "Susan");
+        assertEquals(returnedEmployee.getGender(), "Female");
     }
 
     @Test
