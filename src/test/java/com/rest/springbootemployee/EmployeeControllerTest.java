@@ -163,7 +163,6 @@ class EmployeeControllerTest {
 	void should_delete_existing_employee_when_perform_delete_given_employee() throws Exception {
 		Employee tom = employeeRepository.create(new Employee(1, "Tom", 19, "Male", 15000));
 
-
 		//given
 
 		//when
