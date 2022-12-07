@@ -52,6 +52,21 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name")
                         .value("c1"));
     }
+    @Test
+    void should_return_company_by_page_and_pageSize_when_perform_find_by_page_and_pageSize_given_companies() throws Exception {
+        //given
+        Integer page = 1;
+        Integer pageSize = 2;
+        companyRepository.create(new Company(1, "c1", null));
+        companyRepository.create(new Company(2, "c2", null));
+        companyRepository.create(new Company(3, "c3", null));
+        //when
+        client.perform(MockMvcRequestBuilders.get("/companies?page={page}&pageSize={pageSize}"
+                        , page, pageSize))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("c2"));
+    }
 
 
 }
