@@ -112,4 +112,29 @@ public class CompanyServiceTest {
         //spy
         verify(companyRepository).create(company);
     }
+
+    @Test
+    void should_delete_company_when_delete_given_id() {
+        //given
+        final int companyId = 1;
+        List<Company> companies = new ArrayList<>();
+        Company company = new Company(companyId, "spring", new ArrayList<>());
+        companies.add(company);
+
+        when(companyRepository.findAll()).thenReturn(companies).thenReturn(new ArrayList<>());
+
+        //when
+        List<Company> result = companyService.findAll();
+        companyService.delete(companyId);
+        List<Company> deletedResult = companyService.findAll();
+
+        //then
+        //1. verify data
+        assertThat(result, hasSize(1));
+        assertThat(deletedResult, hasSize(0));
+
+        //2. verify interaction
+        //spy
+        verify(companyRepository).delete(companyId);
+    }
 }

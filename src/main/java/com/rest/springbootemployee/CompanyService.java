@@ -31,4 +31,8 @@ public class CompanyService {
     public Company create(Company company) {
         return companyRepository.create(company);
     }
+
+    public void delete(int companyId) {
+        companyRepository.delete(Integer.valueOf(companyId));
+    }
 }
