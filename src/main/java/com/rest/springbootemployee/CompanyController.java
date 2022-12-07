@@ -9,14 +9,16 @@ import java.util.List;
 @RequestMapping("/companies")
 public class CompanyController {
     private CompanyRepository companyRepository;
+    private CompanyService companyService;
 
-    public CompanyController(CompanyRepository CompanyRepository) {
+    public CompanyController(CompanyRepository CompanyRepository, CompanyService companyService) {
         this.companyRepository = CompanyRepository;
+        this.companyService = companyService;
     }
 
     @GetMapping
     public List<Company> getAll() {
-        return companyRepository.findAll();
+        return companyService.findAll();
     }
 
     @GetMapping("/{id}")
