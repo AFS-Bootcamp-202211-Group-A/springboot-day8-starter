@@ -114,4 +114,18 @@ public class CompanyServiceTest {
         assertEquals(100,resultCompany.getId());
         assertEquals("newSpring", resultCompany.getName());
     }
+    @Test
+    void should_delete_company_when_delete_given_companyId() {
+        Integer id = 100;
+        List<Company> companies = new ArrayList<>();
+        companies.add(new Company(id, "spring", new ArrayList<>()));
+        //companies.add(new Company(101, "autumn", new ArrayList<>()));
+
+        companyService.delete(id);
+
+        verify(companyRepository).delete(id);
+//        assertEquals("101", companies.get(0).getId());
+//        assertEquals("autumn", companies.get(0).getName());
+        assertEquals(0,companyService.findAll().size());
+    }
 }
