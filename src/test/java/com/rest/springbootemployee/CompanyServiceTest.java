@@ -51,4 +51,27 @@ public class CompanyServiceTest {
         verify(companyRepository).findById(id);
         assertEquals("spring",resultCompany.getName());
     }
+    @Test
+    void should_get_employees_when_get_given_company_id() {
+        Integer companyId = 100;
+        List<Company> companies = new ArrayList<>();
+        ArrayList<Employee> employeesOfCompany1 = new ArrayList<>();
+        employeesOfCompany1.add(new Employee(1, "Carlos", 26, "Male", 70000));
+        employeesOfCompany1.add(new Employee(2, "Nicole", 22, "Female", 80000));
+        companies.add(new Company(companyId, "spring", employeesOfCompany1));
+        companies.add(new Company(101, "autumn", employeesOfCompany1));
+        when(companyRepository.getEmployees(companyId)).thenReturn(employeesOfCompany1);
+
+        List<Employee> employees = companyService.getEmployees(companyId);
+
+        verify(companyRepository).getEmployees(companyId);
+        assertEquals("Carlos",employees.get(0).getName());
+        assertEquals(26,employees.get(0).getAge());
+        assertEquals("Male",employees.get(0).getGender());
+        assertEquals(70000,employees.get(0).getSalary());
+        assertEquals("Nicole",employees.get(1).getName());
+        assertEquals(22,employees.get(1).getAge());
+        assertEquals("Female",employees.get(1).getGender());
+        assertEquals(80000,employees.get(1).getSalary());
+    }
 }

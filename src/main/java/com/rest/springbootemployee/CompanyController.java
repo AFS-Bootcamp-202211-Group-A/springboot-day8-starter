@@ -28,7 +28,7 @@ public class CompanyController {
 
     @GetMapping("/{id}/employees")
     public List<Employee> getEmployees(@PathVariable Integer id) {
-        return companyRepository.getEmployees(id);
+        return companyService.getEmployees(id);
     }
 
     @GetMapping(params = {"page", "pageSize"})
