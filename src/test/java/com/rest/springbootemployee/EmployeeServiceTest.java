@@ -12,7 +12,6 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -89,10 +88,8 @@ class EmployeeServiceTest {
         ArrayList<Employee> filteredEmployees = new ArrayList<>();
         Employee employee1 = new Employee(1, "Dummy1", 20, "Male", 13213);
         Employee employee2 = new Employee(2, "Dummy2", 21, "Male", 10000);
-//        Employee employee3 = new Employee(3, "Dummy3", 22, "Female", 8000);
         employees.add(employee1);
         employees.add(employee2);
-//        employees.add(employee3);
 
 
         when(employeeRepository.findByGender("Male")).thenReturn(employees);
@@ -119,7 +116,6 @@ class EmployeeServiceTest {
         Employee createdEmployee = employeeService.create(employee3);
 
         assertThat(createdEmployee, equalTo(employee3));
-//        assertThat(employeeRepository.employees, hasSize(1));
         verify(employeeRepository).create(employee3);
 
     }
@@ -134,7 +130,6 @@ class EmployeeServiceTest {
         employeeService.delete(id);
 
         assertThat(employeeRepository.findAll(), hasSize(0));
-//        assertThat(employeeRepository.employees, hasSize(1));
         verify(employeeRepository).delete(id);
 
     }
@@ -149,7 +144,6 @@ class EmployeeServiceTest {
         Employee employee5 = new Employee(12, "Dummy5", 20, "Male", 11000);
         employees.add(employee4);
         employees.add(employee5);
-//        employees.add(employee6);
 
         when(employeeRepository.findByPage(page, pageSize)).thenReturn(employees);
 
