@@ -35,7 +35,7 @@ public class EmployeeControllerTest {
     @Test
     void should_get_all_employees_when_perform_get_given_employees() throws Exception {
         //given
-        Employee employee = employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
+        employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
 
         //when
         client.perform(MockMvcRequestBuilders.get("/employees"))
@@ -70,7 +70,7 @@ public class EmployeeControllerTest {
     @Test
     void should_get_employees_by_gender_when_perform_get_given_employee_gender() throws Exception {
         //given
-        Employee susan = employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
+        employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
         employeeRepository.create(new Employee(11, "Bob", 20, "Male", 10550));
 
         //when
@@ -88,7 +88,7 @@ public class EmployeeControllerTest {
     @Test
     void should_get_employees_by_page_when_perform_get_given_employees() throws Exception {
         //given
-        Employee susan = employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
+        employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
         employeeRepository.create(new Employee(11, "Bob", 20, "Male", 10550));
         employeeRepository.create(new Employee(12, "Mary", 20, "Male", 10550));
 
@@ -166,7 +166,7 @@ public class EmployeeControllerTest {
     @Test
     void should_delete_employee_when_perform_delete_given_employees() throws Exception {
         //given
-        Employee susan = employeeRepository.create(new Employee(1, "Susan", 22, "Female", 10000));
+        employeeRepository.create(new Employee(1, "Susan", 22, "Female", 10000));
 
         //when&then
         client.perform(MockMvcRequestBuilders.delete("/employees/{id}", 2))

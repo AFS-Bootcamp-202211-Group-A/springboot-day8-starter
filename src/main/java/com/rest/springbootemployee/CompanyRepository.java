@@ -76,4 +76,8 @@ public class CompanyRepository {
         }
         return existingCompany;
     }
+
+    public void clearAll() {
+        companies.clear();
+    }
 }
