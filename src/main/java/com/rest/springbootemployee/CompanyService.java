@@ -14,6 +14,15 @@ public class CompanyService {
     public List<Company> findAll() {
         return companyRepository.findAll();
     }
+
+    public Company update(Integer id, Company company) {
+        Company existingCompany = findById(id);
+        if (company.getName() != null) {
+            existingCompany.setName(company.getName());
+        }
+        return existingCompany;
+    }
+
     public Company findById(Integer id) {
         return companyRepository.findById(id);
     }
