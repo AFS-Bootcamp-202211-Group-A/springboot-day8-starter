@@ -28,7 +28,7 @@ public class EmployeeRepository {
                 .orElseThrow(NoEmployeeFoundException::new);
     }
 
-    public List<Employee> findByGender(String gender) {
+    public List<Employee> findByGender(String gender) throws NoEmployeeFoundException{
         return employees.stream()
                 .filter(employee -> employee.getGender().equals(gender))
                 .collect(Collectors.toList());
@@ -45,12 +45,12 @@ public class EmployeeRepository {
     }
 
 
-    public void delete(Integer id)  throws NoEmployeeFoundException{
+    public void delete(Integer id) throws NoEmployeeFoundException{
         Employee existingEmployee = findById(id);
         employees.remove(existingEmployee);
     }
 
-    public List<Employee> findByPage(int page, int pageSize) {
+    public List<Employee> findByPage(int page, int pageSize) throws NoEmployeeFoundException{
         return employees.stream()
                 .skip((long) (page - 1) * pageSize)
                 .limit(pageSize)
