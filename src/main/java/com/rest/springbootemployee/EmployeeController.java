@@ -24,18 +24,18 @@ public class EmployeeController {
 
     @GetMapping("/{id}")
     public Employee getById(@PathVariable Integer id) {
-        return employeeRepository.findById(id);
+        return employeeService.findById(id);
     }
 
     @GetMapping(params = {"gender"})
     public List<Employee> getByGender(@RequestParam String gender) {
-        return employeeRepository.findByGender(gender);
+        return employeeService.findByGender(gender);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Employee add(@RequestBody Employee employee) {
-        return employeeRepository.create(employee);
+        return employeeService.create(employee);
     }
     @PutMapping("/{id}")
     public Employee update(@PathVariable Integer id, @RequestBody Employee employee) {
@@ -50,7 +50,7 @@ public class EmployeeController {
 
     @GetMapping(params = {"page", "pageSize"})
     public List<Employee> getByPage(int page, int pageSize) {
-        return employeeRepository.findByPage(page, pageSize);
+        return employeeService.findByPage(page, pageSize);
     }
 
 }
