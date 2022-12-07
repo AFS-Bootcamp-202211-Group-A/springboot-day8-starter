@@ -100,6 +100,34 @@ public class CompanyServiceTest {
     }
 
     @Test
+    void should_get_employees_by_company_when_get_employees_by_companies_given_companies() {
+        //given
+        Employee sam = new Employee(3, "Sam", 24, "Male", 30000);
+
+        Company java = new Company(3, "java",  new ArrayList<>(Arrays.asList(sam)));
+        final Integer companyId = Integer.valueOf(java.getId());
+
+        when(companyRepository.getEmployees(companyId)).thenReturn(
+                java.getEmployees()
+        );
+
+        //when
+        List<Employee> returnedEmployees = companyService.getEmployees(companyId);
+
+        //then
+        //1. verify data
+        assertThat(returnedEmployees, hasSize(1));
+        assertThat(returnedEmployees.get(0).getName(), equalTo("Sam"));
+        assertThat(returnedEmployees.get(0).getAge(), equalTo(24));
+        assertThat(returnedEmployees.get(0).getGender(), equalTo("Male"));
+        assertThat(returnedEmployees.get(0).getSalary(), equalTo(30000));
+
+        //2. verify interaction
+        //spy
+        verify(companyRepository).getEmployees(companyId);
+    }
+
+    @Test
     void should_update_only_name_when_update_given_company() {
         //given
         final int companyId = 1;
