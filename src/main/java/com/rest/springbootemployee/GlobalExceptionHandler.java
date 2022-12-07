@@ -11,7 +11,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({NoEmployeeFoundException.class,NoCompanyFoundException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void method(){
-        return ;
     }
 }
 
