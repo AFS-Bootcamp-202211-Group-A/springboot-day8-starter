@@ -35,5 +35,21 @@ public class EmployeeServiceTest {
         verify(employeeRepository).findAll();
         assertEquals(result,employeeList);
     }
+    void should_update_employee_when_post_given_employee_id() throws Exception {
+        //given
+        Integer id = 10;
+        Employee oldBob = new Employee(id, "Bob", 20, "Male", 0);
+        Employee newBob = new Employee(id, "Bobe", 23, "Female", 5000);
+        when(employeeRepository.findById(id)).thenReturn(oldBob);
+        //when
+        Employee updatedBob = employeeService.update(id, newBob);
+        //then
+        verify(employeeRepository).findById(id);
+        assertEquals(23,updatedBob.getAge());
+        assertEquals(5000,updatedBob.getSalary());
+
+        assertEquals("Bob",updatedBob.getName());
+        assertEquals("Male",updatedBob.getGender());
+    }
 
 }
