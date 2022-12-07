@@ -158,4 +158,18 @@ public class CompanyControllerTest {
         assertThat(company.getName(), equalTo("boot"));
         assertThat(company.getId(), equalTo(existingCompany.getId()));
     }
+
+    @Test
+    void should_delete_existing_company_when_perform_delete_given_companye() throws Exception {
+        //given
+        Company company = companyRepository.create(new Company(1, "spring", new ArrayList<>()));
+
+        //when
+        client.perform(MockMvcRequestBuilders.delete("/companies/{id}", company.getId()))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+
+        //then
+        List<Company> companies = companyRepository.findAll();
+        assertThat(companies, empty());
+    }
 }
