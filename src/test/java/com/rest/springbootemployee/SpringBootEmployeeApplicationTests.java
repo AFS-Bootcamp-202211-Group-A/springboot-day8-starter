@@ -61,4 +61,21 @@ class SpringBootEmployeeApplicationTests {
 		//then
 	}
 
+	@Test
+	void should_get_employee_with_specific_gender_when_perform_get_by_gender_given_employees() throws Exception {
+		//given
+		Employee susan = employeeRepository.create(new Employee(1, "Susan", 20, "Female", 10000));
+		Employee bob = employeeRepository.create(new Employee(2, "Bob", 20, "Male", 10000));
+		Employee peter = employeeRepository.create(new Employee(3, "Peter", 20, "Male", 10000));
+		//when
+		client.perform(MockMvcRequestBuilders.get("/employees?gender={gender}", "Male"))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.jsonPath("$[*].name", containsInAnyOrder("Bob", "Peter")))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[*].age", containsInAnyOrder(20, 20)))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[*].gender", containsInAnyOrder("Male", "Male")))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[*].salary", containsInAnyOrder(10000, 10000)));
+
+		//then
+	}
+
 }
