@@ -46,14 +46,26 @@ class CompanyControllerTest {
     }
 
     @Test
-    void should_get_company_by_id_when_perform_get_given_company_id() {
+    void should_get_company_by_id_when_perform_get_given_company_id() throws Exception {
+        //given
+        List<Employee> employees = new ArrayList<>();
+        Company dummyCompany = companyRepository.create(new Company(10, "Dummy Company", employees));
 
+        //when
+
+        client.perform(MockMvcRequestBuilders.get("/companies/{id}", dummyCompany.getId()))
+                // 1. assert response status
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                // 2. assert response data
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Dummy Company"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees").isArray());
 
     }
 
     @Test
     void should_get_employees_from_company_when_perform_get_given_company_id() {
-
+        
 
     }
 
@@ -62,14 +74,14 @@ class CompanyControllerTest {
     }
 
     @Test
-    void create() {
+    void should_get_created_company_when_perform_create_given_company() {
     }
 
     @Test
-    void update() {
+    void should_update_company_when_perform_update_given_companies() {
     }
 
     @Test
-    void deleteCompany() {
+    void should_delete_company_when_perform_delete_given_companies() {
     }
 }
