@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -24,7 +25,7 @@ public class CompanyServiceTest {
     CompanyService companyService;
 
     @Test
-    void should_return_all_company_when_find_all_given_companys() {
+    void should_return_all_company_when_find_all_given_companies() {
         // given
         List<Company> companies = new ArrayList<>();
         Company company = new Company(1, "spring", null);
@@ -36,5 +37,20 @@ public class CompanyServiceTest {
         assertThat(results, hasSize(1));
         assertEquals(company, results.get(0));
         verify(companyRepository).findAll();
+    }
+
+    @Test
+    void should_get_company_by_id_when_perform_get_by_id_through_service_given_companies() {
+        // given
+        List<Employee> employees = Arrays.asList(new Employee(1, "Susan", 22, "Female", 1000));
+        Company company = new Company(1, "spring", employees);
+        when(companyRepository.findById(company.getId())).thenReturn(company);
+        // when
+        companyService.findById(company.getId());
+        // then
+
+        verify(companyRepository).findById(company.getId());
+        assertEquals(company.getName(), "spring");
+        assertEquals(company.getEmployees(), employees);
     }
 }
