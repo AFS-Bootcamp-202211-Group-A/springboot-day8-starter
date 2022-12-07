@@ -1,8 +1,6 @@
 package com.rest.springbootemployee;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rest.springbootemployee.Employee;
-import com.rest.springbootemployee.EmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,9 +88,9 @@ public class EmployeeControllerTest {
     @Test
     void should_get_employee_by_page_and_pageSize_when_perform_get_by_page_and_pageSize_given_employees_and_page_and_pageSize() throws Exception {
         //given
-        Employee susan = employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
-        Employee bob = employeeRepository.create(new Employee(11, "Bob", 23, "Male", 20000));
-        Employee bob3 = employeeRepository.create(new Employee(13, "Bob3", 24, "Male", 20000));
+        employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
+        employeeRepository.create(new Employee(11, "Bob", 23, "Male", 20000));
+        employeeRepository.create(new Employee(13, "Bob3", 24, "Male", 20000));
         //when
         client.perform(MockMvcRequestBuilders.get("/employees?page={page}&pageSize={pageSize}", 1, 2))
                 // 1. assert response status

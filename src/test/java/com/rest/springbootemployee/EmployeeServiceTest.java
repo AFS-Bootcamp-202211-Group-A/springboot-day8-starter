@@ -1,20 +1,16 @@
 package com.rest.springbootemployee;
 
-import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -65,7 +61,7 @@ public class EmployeeServiceTest {
         Employee employee = new Employee(10, "Susan", 22, "Female", 10000);
         when(employeeRepository.findById(employee.getId())).thenReturn(employee);
         // when
-        Employee result = employeeService.findById(employee.getId());
+        employeeService.findById(employee.getId());
         // then
 
         verify(employeeRepository).findById(employee.getId());
@@ -92,12 +88,12 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    void should_get_employee_by_page_and_pageSize_when_perform_get_by_page_and_pageSize_through_service_given_employees_and_page_and_pageSize() throws Exception {
+    void should_get_employee_by_page_and_pageSize_when_perform_get_by_page_and_pageSize_through_service_given_employees_and_page_and_pageSize() {
         //given
         List<Employee> employees = new ArrayList<>();
         Employee susan = employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
         Employee bob = employeeRepository.create(new Employee(11, "Bob", 23, "Male", 20000));
-        Employee bob3 = employeeRepository.create(new Employee(13, "Bob3", 24, "Male", 20000));
+        employeeRepository.create(new Employee(13, "Bob3", 24, "Male", 20000));
         employees.add(susan);
         employees.add(bob);
 
@@ -115,7 +111,7 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    void should_add_employee_when_perform_through_service_add_given_employees() throws Exception {
+    void should_add_employee_when_perform_through_service_add_given_employees() {
         //given
         Employee susan = new Employee(10, "Susan", 22, "Female", 10000);
         //Employee susan = employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));

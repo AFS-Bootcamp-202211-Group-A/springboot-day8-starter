@@ -9,11 +9,9 @@ import java.util.List;
 @RequestMapping("/employees")
 public class EmployeeController {
 
-    private final EmployeeRepository employeeRepository;
     private final EmployeeService employeeService;
 
     public EmployeeController(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
         this.employeeService = new EmployeeService(employeeRepository);
     }
 
