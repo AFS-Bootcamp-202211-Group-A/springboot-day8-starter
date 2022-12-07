@@ -133,4 +133,29 @@ public class CompanyControllerTest {
         Company comp = companies.get(0);
         assertThat(comp.getName(), equalTo("spring"));
     }
+
+    @Test
+    void should_update_existing_company_when_perform_put_given_company() throws Exception {
+        Company existingCompany = companyRepository.create(new Company(1, "spring", new ArrayList<>()));
+
+        Company companyToUpdated = new Company(2, "boot", new ArrayList<>());
+        String companyToUpdatedJson = new ObjectMapper().writeValueAsString(companyToUpdated);
+
+        //given
+
+        //when
+        client.perform(MockMvcRequestBuilders.put("/companies/{id}", existingCompany.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(companyToUpdatedJson))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(existingCompany.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("boot"));
+
+        //then
+        List<Company> companies = companyRepository.findAll();
+        assertThat(companies, hasSize(1));
+        Company company = companies.get(0);
+        assertThat(company.getName(), equalTo("boot"));
+        assertThat(company.getId(), equalTo(existingCompany.getId()));
+    }
 }
