@@ -41,7 +41,7 @@ public class EmployeeRepository {
         return employee;
     }
 
-    private Integer generateNextId() {
+    public Integer generateNextId() {
         int maxId = employees.stream()
                 .mapToInt(employee -> employee.getId())
                 .max()

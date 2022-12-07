@@ -27,4 +27,7 @@ public class EmployeeService {
         }
         return existingEmployee;
     }
+    public Employee create(Employee employee) {
+        return employeeRepository.create(employee);
+    }
 }
