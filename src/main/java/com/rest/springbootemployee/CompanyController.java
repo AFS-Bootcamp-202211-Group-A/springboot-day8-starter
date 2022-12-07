@@ -9,9 +9,11 @@ import java.util.List;
 @RequestMapping("/companies")
 public class CompanyController {
     private CompanyRepository companyRepository;
+    private final CompanyService companyService;
 
     public CompanyController(CompanyRepository CompanyRepository) {
         this.companyRepository = CompanyRepository;
+        this.companyService = new CompanyService(companyRepository);
     }
 
     @GetMapping
