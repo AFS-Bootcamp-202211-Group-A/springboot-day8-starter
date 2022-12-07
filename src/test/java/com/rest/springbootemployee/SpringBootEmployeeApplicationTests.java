@@ -75,6 +75,7 @@ class SpringBootEmployeeApplicationTests {
 		//when
 		client.perform(MockMvcRequestBuilders.get("/employees?gender={gender}", "Male"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[*].name", containsInAnyOrder("Bob", "Peter")))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[*].age", containsInAnyOrder(20, 20)))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[*].gender", containsInAnyOrder("Male", "Male")))
