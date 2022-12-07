@@ -54,4 +54,22 @@ public class EmployeeServiceTest {
         assertEquals(employee.getName(), updatedEmployee.getName());
         assertEquals(employee.getGender(), updatedEmployee.getGender());
     }
+
+    @Test
+    void should_get_employee_by_id_when_perform_get_by_id_through_service_given_employees() {
+        // given
+        List<Employee> employees = new ArrayList<>();
+        Employee employee = new Employee(10, "Susan", 22, "Female", 10000);
+        employees.add(employee);
+        when(employeeRepository.findById(employee.getId())).thenReturn(employee);
+        // when
+        Employee result = employeeService.findById(employee.getId());
+        // then
+
+        verify(employeeRepository).findById(employee.getId());
+        assertEquals(employee.getAge(), 22);
+        assertEquals(employee.getSalary(), 10000);
+        assertEquals(employee.getName(), "Susan");
+        assertEquals(employee.getGender(), "Female");
+    }
 }
