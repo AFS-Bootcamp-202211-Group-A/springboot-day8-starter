@@ -23,7 +23,7 @@ public class EmployeeServiceTest {
     EmployeeService employeeService;
 
     @Test
-    void should_get_all_employees_when_perform_get_given_employees() throws Exception {
+    void should_get_all_employees_when_perform_get_given_employees() {
         List<Employee> employeeList = new ArrayList<>();
         Employee bob = new Employee(10, "Bob", 23, "Male", 5000);
         employeeList.add(bob);
@@ -35,7 +35,8 @@ public class EmployeeServiceTest {
         verify(employeeRepository).findAll();
         assertEquals(result,employeeList);
     }
-    void should_update_employee_when_post_given_employee_id() throws Exception {
+    @Test
+    void should_update_employee_when_post_given_employee_id() {
         //given
         Integer id = 10;
         Employee oldBob = new Employee(id, "Bob", 20, "Male", 0);
@@ -52,4 +53,17 @@ public class EmployeeServiceTest {
         assertEquals("Male",updatedBob.getGender());
     }
 
+    @Test
+    void should_post_employee_when_perform_post_given_employees_details() {
+        List<Employee> employeeList = new ArrayList<>();
+        Employee bob = new Employee(10, "Bob", 23, "Male", 5000);
+        employeeList.add(bob);
+
+        when(employeeRepository.create(bob)).thenReturn(bob);
+//        when
+        Employee result = employeeService.create(bob);
+//        verify
+        verify(employeeRepository).create(bob);
+        assertEquals(result,bob);
+    }
 }
