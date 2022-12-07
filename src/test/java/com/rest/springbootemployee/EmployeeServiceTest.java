@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -65,6 +66,19 @@ public class EmployeeServiceTest {
         assertEquals(20, addedEmployee.getAge());
         assertEquals("Male", addedEmployee.getGender());
         assertEquals(5500, addedEmployee.getSalary());
+    }
+    @Test
+    void should_delete_employee_when_delete_given_employee_id() {
+        //given
+        List<Employee> employees = new ArrayList<>();
+        Integer employeeId = 10;
+        Employee employee = new Employee(employeeId, "Bob", 20, "Male", 5500);
+        employees.add(employee);
+        //when
+        employeeService.delete(employeeId);
+        //then
+        verify(employeeRepository).delete(employeeId);
+        assertEquals(0, employeeService.findAll().size());
     }
 
 }
