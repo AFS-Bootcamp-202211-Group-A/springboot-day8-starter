@@ -52,4 +52,19 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].employees").isArray());
     }
 
+    @Test
+    void should_get_corresponding_company_when_perform_get_by_id_given_companies() throws Exception {
+        //given
+        Company company = companyRepository.create(new Company(1, "Company A", new ArrayList<>()));
+        companyRepository.create(new Company(2, "Company B", new ArrayList<>()));
+        //when&then
+        client.perform(MockMvcRequestBuilders.get("/companies/{id}", company.getId()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("name").value("Company A"))
+                .andExpect(MockMvcResultMatchers.jsonPath("employees").isArray());
+    }
+
+
+
 }
