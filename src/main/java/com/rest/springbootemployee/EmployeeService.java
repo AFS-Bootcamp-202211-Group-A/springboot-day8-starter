@@ -38,6 +38,9 @@ public class EmployeeService {
     public List<Employee> findByPage(int page, int pageSize){
         return employeeRepository.findByPage(page, pageSize);
     }
+    public Employee create(Employee employee) {
+        return employeeRepository.create(employee);
+    }
 
     public void delete(Integer id) {
         employeeRepository.delete(id);
