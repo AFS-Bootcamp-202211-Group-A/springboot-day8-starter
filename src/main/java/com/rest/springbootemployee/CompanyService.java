@@ -38,4 +38,7 @@ public class CompanyService {
         return companyRepository.findByPage(page, pageSize);
     }
 
+    public Company create(Company company) {
+        return companyRepository.create(company);
+    }
 }

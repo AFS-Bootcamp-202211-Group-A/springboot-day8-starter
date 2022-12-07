@@ -40,7 +40,7 @@ public class CompanyController {
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public Company create(@RequestBody Company company) {
-        return companyRepository.create(company);
+        return companyService.create(company);
     }
 
     @PutMapping("/{id}")

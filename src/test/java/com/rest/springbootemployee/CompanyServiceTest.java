@@ -117,7 +117,20 @@ class CompanyServiceTest {
 
     }
 
-    
+    @Test
+    void should_return_company_when_create_given_company() {
+        int companyId = 1;
+        List<Employee> employees = new ArrayList<>();
+        Company company = new Company(companyId, "Dummy Company", employees);
+
+        when(companyRepository.create(company)).thenReturn(company);
+
+        Company createdCompany = companyService.create(company);
+
+        assertThat(createdCompany, equalTo(company));
+        verify(companyRepository).create(company);
+
+    }
 
 
 
