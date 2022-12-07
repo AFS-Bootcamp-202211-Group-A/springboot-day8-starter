@@ -81,4 +81,27 @@ public class EmployeeServiceTest {
         //spy
         verify(employeeRepository).findById(employeeId);
     }
+
+    @Test
+    void should_return_employee_with_id_when_find_by_id_given_employees() {
+        //given
+        int employeeId = 1;
+        Employee employee = new Employee(employeeId, "Susan", 22, "Female", 10000);
+
+        when(employeeRepository.findById(employeeId)).thenReturn(employee);
+
+        //when
+        Employee updatedEmployee = employeeService.findById(employeeId);
+
+        //then
+        //1. verify data age, salary
+        assertThat(updatedEmployee.getAge(), equalTo(22));
+        assertThat(updatedEmployee.getSalary(), equalTo(10000));
+        assertThat(updatedEmployee.getName(), equalTo("Susan"));
+        assertThat(updatedEmployee.getGender(), equalTo("Female"));
+
+        //2. verify interaction
+        //spy
+        verify(employeeRepository).findById(employeeId);
+    }
 }
