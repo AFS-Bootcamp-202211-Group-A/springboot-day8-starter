@@ -85,7 +85,7 @@ public class EmployeeControllerTest {
     @Test
     void should_post_employee_when_perform_post_given_employees_details() throws Exception{
         //given
-        Employee bob = employeeRepository.create(new Employee(10, "Bob",23, "Male", 5000));
+        Employee bob = new Employee(10, "Bob",23, "Male", 5000);
         //when & should
         client.perform(MockMvcRequestBuilders.post("/employees")
                         .content(new ObjectMapper().writeValueAsString(bob))
@@ -103,5 +103,26 @@ public class EmployeeControllerTest {
         assertEquals(5000,newBob.getSalary());
 
     }
+    @Test
+    void should_update_employee_when_perform_put_given_employees_id() throws Exception{
+        //given
+        Employee oldBob = employeeRepository.create(new Employee(10, "Bob",23, "Male", 5000));
+        Employee changeBob = new Employee(30,55000);
+                //when & should
+        client.perform(MockMvcRequestBuilders.put("/employees/{id}", oldBob.getId())
+                        .content(new ObjectMapper().writeValueAsString(changeBob))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect((MockMvcResultMatchers.status().isOk()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Bob"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.age").value(30))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.gender").value("Male"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(55000));
 
+        Employee newBob = employeeRepository.findAll().get(0);
+        assertEquals("Bob",newBob.getName());
+        assertEquals(30,newBob.getAge());
+        assertEquals("Male",newBob.getGender());
+        assertEquals(55000,newBob.getSalary());
+
+    }
 }
