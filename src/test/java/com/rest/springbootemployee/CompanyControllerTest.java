@@ -48,18 +48,20 @@ public class CompanyControllerTest {
         //then
     }
 
-//    @Test
-//    void should_get_company_when_perform_get_by_id_given_companies() throws Exception {
-//        //given
-//        Employee employee = employeeRepository.create(new Employee(1, "Susan", 20, "Female", 10000));
-//        //when
-//        client.perform(MockMvcRequestBuilders.get("/employees/{id}", employee.getId()))
-//                .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect(MockMvcResultMatchers.jsonPath("name").value("Susan"))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.age").value(20))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.gender").value("Female"))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(10000));
-//
-//        //then
-//    }
+    @Test
+    void should_get_company_when_perform_get_by_id_given_companies() throws Exception {
+        //given
+        Employee susan = new Employee(1, "Susan", 22, "Female`", 10000);
+        Employee tom = new Employee(2, "Tom", 23, "Male", 20000);
+        Employee sam = new Employee(3, "Sam", 24, "Male", 30000);
+        Company spring = companyRepository.create(new Company(1, "spring", new ArrayList<>(Arrays.asList(susan, tom)) ));
+        companyRepository.create(new Company(2, "boot",  new ArrayList<>(Arrays.asList(sam))));
+        //when
+        client.perform(MockMvcRequestBuilders.get("/companies/{id}", spring.getId()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(spring.getName()));
+
+        //then
+    }
 }
