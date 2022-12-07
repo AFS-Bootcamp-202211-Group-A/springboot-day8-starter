@@ -130,4 +130,27 @@ public class EmployeeServiceTest {
         //spy
         verify(employeeRepository).findByGender(gender);
     }
+
+    @Test
+    void should_return_employee_when_create_given_employee() {
+        //given
+
+        Employee employee = new Employee(10, "Susan", 22, "female", 10000);
+
+        when(employeeRepository.create(employee)).thenReturn(employee);
+
+        //when
+        Employee createEmployee = employeeService.create(employee);
+
+        //then
+        //1. verify data age, salary
+        assertThat(createEmployee.getAge(), equalTo(22));
+        assertThat(createEmployee.getSalary(), equalTo(10000));
+        assertThat(createEmployee.getName(), equalTo("Susan"));
+        assertThat(createEmployee.getGender(), equalTo("female"));
+
+        //2. verify interaction
+        //spy
+        verify(employeeRepository).create(employee);
+    }
 }
