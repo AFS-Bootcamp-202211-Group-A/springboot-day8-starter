@@ -58,7 +58,7 @@ class SpringBootEmployeeApplicationTests {
 		//when
 		client.perform(MockMvcRequestBuilders.get("/employees/{id}", employee.getId()))
 				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Susan"))
+				.andExpect(MockMvcResultMatchers.jsonPath("name").value("Susan"))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.age").value(20))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.gender").value("Female"))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(10000));
@@ -127,6 +127,35 @@ class SpringBootEmployeeApplicationTests {
 		assertThat(employee.getName(), equalTo("Tom"));
 		assertThat(employee.getAge(), equalTo(19));
 		assertThat(employee.getSalary(), equalTo(15000));
+		assertThat(employee.getGender(), equalTo("Male"));
+	}
+
+	@Test
+	void should_update_existing_employee_when_perform_put_given_employee() throws Exception {
+		Employee tom = employeeRepository.create(new Employee(1, "Tom", 19, "Male", 15000));
+
+		Employee tomUpdated = new Employee(1, "Tom", 20, "Male", 25000);
+		String newEmployeeJson = new ObjectMapper().writeValueAsString(tomUpdated);
+
+		//given
+
+		//when
+		client.perform(MockMvcRequestBuilders.put("/employees/{id}", tom.getId())
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(newEmployeeJson))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Tom"))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.age").value(20))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(25000))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.gender").value("Male"));
+
+		//then
+		List<Employee> employees = employeeRepository.findAll();
+		assertThat(employees, hasSize(1));
+		Employee employee = employees.get(0);
+		assertThat(employee.getName(), equalTo("Tom"));
+		assertThat(employee.getAge(), equalTo(20));
+		assertThat(employee.getSalary(), equalTo(25000));
 		assertThat(employee.getGender(), equalTo("Male"));
 	}
 
