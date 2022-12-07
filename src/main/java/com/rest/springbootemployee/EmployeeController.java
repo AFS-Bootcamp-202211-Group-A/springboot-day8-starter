@@ -9,15 +9,17 @@ import java.util.List;
 @RequestMapping("/employees")
 public class EmployeeController {
 
-    private EmployeeRepository employeeRepository;
+    private final EmployeeRepository employeeRepository;
+    private final EmployeeService employeeService;
 
     public EmployeeController(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
+        this.employeeService = new EmployeeService(employeeRepository);
     }
 
     @GetMapping
     public List<Employee> getAll() {
-        return employeeRepository.findAll();
+        return employeeService.findAll();
     }
 
     @GetMapping("/{id}")
