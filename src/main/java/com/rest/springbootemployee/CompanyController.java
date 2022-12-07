@@ -23,7 +23,7 @@ public class CompanyController {
 
     @GetMapping("/{id}")
     public Company getById(@PathVariable Integer id) {
-        return companyRepository.findById(id);
+        return companyService.findById(id);
     }
 
     @GetMapping("/{id}/employees")

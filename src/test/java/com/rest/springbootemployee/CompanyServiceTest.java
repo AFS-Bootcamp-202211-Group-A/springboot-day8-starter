@@ -37,4 +37,18 @@ public class CompanyServiceTest {
         verify(companyRepository).findAll();
         assertEquals(companies,resultCompanies);
     }
+    @Test
+    void should_get_company_when_get_given_company_id() {
+        Integer id = 100;
+        List<Company> companies = new ArrayList<>();
+        Company company = new Company(id, "spring", new ArrayList<>());
+        companies.add(company);
+        companies.add(new Company(101, "autumn", new ArrayList<>()));
+        when(companyRepository.findById(id)).thenReturn(company);
+
+        Company resultCompany = companyService.findById(id);
+
+        verify(companyRepository).findById(id);
+        assertEquals("spring",resultCompany.getName());
+    }
 }
