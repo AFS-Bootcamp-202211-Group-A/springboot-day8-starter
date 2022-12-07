@@ -21,6 +21,10 @@ public class EmployeeService {
         return employeeRepository.findById(id);
     }
 
+    public List<Employee> findByGender(String gender) {
+        return employeeRepository.findByGender(gender);
+    }
+
     public Employee update(Integer id, Employee employee) {
         Employee existingEmployee = employeeRepository.findById(id);
         if (employee.getAge() != null) {
@@ -35,4 +39,6 @@ public class EmployeeService {
     public Employee create(Employee employee) {
         return employeeRepository.create(employee);
     }
+
+
 }
