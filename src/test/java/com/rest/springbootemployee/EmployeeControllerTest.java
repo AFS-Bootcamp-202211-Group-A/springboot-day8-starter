@@ -1,10 +1,12 @@
 package com.rest.springbootemployee;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -78,4 +80,20 @@ public class EmployeeControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].gender").value("Female"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].salary").value(5000));
     }
+
+    @Test
+    void should_post_employee_when_perform_post_given_employees_details() throws Exception{
+        //given
+        Employee bob = employeeRepository.create(new Employee(10, "Bob",23, "Male", 5000));
+        //when & should
+        client.perform(MockMvcRequestBuilders.post("/employees")
+                        .content(new ObjectMapper().writeValueAsString(bob))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect((MockMvcResultMatchers.status().isCreated()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Bob"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.age").value(23))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.gender").value("Male"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(5000));
+    }
+
 }
