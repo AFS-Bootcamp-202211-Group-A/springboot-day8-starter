@@ -1,11 +1,13 @@
 package com.rest.springbootemployee;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -13,8 +15,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 
 @SpringBootTest
@@ -106,15 +110,67 @@ class CompanyControllerTest {
     }
 
     @Test
-    void should_get_created_company_when_perform_create_given_company() {
+    void should_get_created_company_when_perform_create_given_company() throws Exception {
+        //given
 
+        List<Employee> employees = new ArrayList<>();
+        Company dummyCompany = new Company(10, "Dummy Company", employees);
+
+
+        //when&then
+        client.perform(MockMvcRequestBuilders.post("/companies").content(asJsonString(dummyCompany)).contentType(MediaType.APPLICATION_JSON))
+                // 1. assert response status
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                // 2. assert response data
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Dummy Company"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees").isArray());
+
+        //then
+        List<Company> companies = companyRepository.findAll();
+        assertThat(companies, hasSize(1));
+        Company company= companies.get(0);
+        assertThat(company.getName(), equalTo("Dummy Company"));
+        assertThat(company.getEmployees(), equalTo(employees));
     }
 
     @Test
-    void should_update_company_when_perform_update_given_companies() {
+    void should_update_company_when_perform_update_given_companies() throws Exception {
+        //given
+        List<Employee> employees = new ArrayList<>();
+        Company dummyCompany = companyRepository.create(new Company(10, "Dummy Company", employees));
+
+        Company dummyCompanytoBeUpdated = new Company(10, "Dummy Company 2", employees);
+
+
+
+        //when&then
+        client.perform(MockMvcRequestBuilders.put("/companies/{id}", dummyCompany.getId()).content(asJsonString(dummyCompanytoBeUpdated)).contentType(MediaType.APPLICATION_JSON))
+                // 1. assert response status
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                // 2. assert response data
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Dummy Company 2"))
+                .andDo(print());
+
+//        //then
+        List<Company> companies = companyRepository.findAll();
+        assertThat(companies, hasSize(1));
+        Company company= companies.get(0);
+        assertThat(company.getName(), equalTo("Dummy Company 2"));
+        assertThat(company.getEmployees(), equalTo(employees));
+
     }
 
     @Test
     void should_delete_company_when_perform_delete_given_companies() {
+    }
+
+    public static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
