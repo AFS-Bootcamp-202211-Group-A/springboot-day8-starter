@@ -45,4 +45,29 @@ public class CompanyServiceTest {
         //spy
         verify(companyRepository).findAll();
     }
+
+    @Test
+    void should_update_only_name_when_update_given_company() {
+        //given
+        final int companyId = 1;
+        Company company = new Company(companyId, "spring", new ArrayList<>());
+        Company companyToBeUpdated = new Company(companyId, "boot", new ArrayList<>());
+
+        when(companyRepository.findById(companyId)).thenReturn(company);
+
+        //when
+        Company updatedCompany = companyService.update(companyId, companyToBeUpdated);
+
+        //then
+        //1. verify data age, salary
+        //will change
+        assertThat(updatedCompany.getId(), equalTo(companyId));
+        assertThat(updatedCompany.getName(), equalTo("boot"));
+        //will not change
+        assertThat(updatedCompany.getEmployees(), equalTo(company.getEmployees()));
+
+        //2. verify interaction
+        //spy
+        verify(companyRepository).findById(companyId);
+    }
 }
