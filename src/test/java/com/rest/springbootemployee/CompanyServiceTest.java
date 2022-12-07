@@ -101,11 +101,29 @@ public class CompanyServiceTest {
                 new Company(2, "boot", employees)
         );
         when(companyRepository.findByPage(1,2)).thenReturn(companies);
-        
+
         //when
         List<Company> returnedCompanies = this.companyService.findByPage(1,2);
 
         //this
         assertEquals(companies, returnedCompanies);
+    }
+
+    @Test
+    void should_add_company_when_perform_through_service_add_given_companies() {
+        //given
+        List<Employee> employees = Arrays.asList(
+                new Employee(1, "Sam", 20, "Male", 200000),
+                new Employee(2, "Ken", 20, "Male", 200000)
+        );
+        Company company = new Company(1, "spring", employees);
+
+        when(this.companyRepository.create(company)).thenReturn(company);
+
+        //when
+        Company returnedCompany = this.companyService.create(company);
+
+        //then
+        assertEquals(company.getName(), returnedCompany.getName());
     }
 }
