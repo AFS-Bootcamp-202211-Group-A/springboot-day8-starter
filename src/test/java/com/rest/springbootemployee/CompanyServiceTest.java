@@ -91,4 +91,25 @@ public class CompanyServiceTest {
         //spy
         verify(companyRepository).findById(companyId);
     }
+
+    @Test
+    void should_return_company_when_create_given_company() {
+        //given
+
+        Company company = new Company(1, "spring", new ArrayList<>());
+
+        when(companyRepository.create(company)).thenReturn(company);
+
+        //when
+        Company createdCompany = companyService.create(company);
+
+        //then
+        //1. verify data age, salary
+        assertThat(createdCompany.getId(), equalTo(company.getId()));
+        assertThat(createdCompany.getName(), equalTo("spring"));
+
+        //2. verify interaction
+        //spy
+        verify(companyRepository).create(company);
+    }
 }
