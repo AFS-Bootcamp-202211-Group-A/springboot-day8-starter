@@ -114,4 +114,32 @@ public class EmployeeServiceTest {
         assertEquals("Male", resultEmployees.get(0).getGender());
         assertEquals(5500, resultEmployees.get(0).getSalary());
     }
+    @Test
+    void should_get_employees_when_get_given_page_and_pageSize() {
+        int page = 1;
+        int pageSize = 2;
+        List<Employee> employees = new ArrayList<>();
+        Employee employee1 = new Employee(10, "Bob", 20, "Male", 5500);
+        Employee employee2 = new Employee(11, "Mary", 20, "Female", 500);
+        Employee employee3 = new Employee(12, "Peter", 22, "Male", 50000);
+        employees.add(employee1);
+        employees.add(employee2);
+        employees.add(employee3);
+        List<Employee> expectedEmployees = new ArrayList<>();
+        expectedEmployees.add(employee1);
+        expectedEmployees.add(employee2);
+        when(employeeRepository.findByPage(page,pageSize)).thenReturn(expectedEmployees);
+
+        List<Employee> resultEmployees = employeeService.findByPage(page, pageSize);
+
+        verify(employeeRepository).findByPage(page,pageSize);
+        assertEquals("Bob", resultEmployees.get(0).getName());
+        assertEquals(20, resultEmployees.get(0).getAge());
+        assertEquals("Male", resultEmployees.get(0).getGender());
+        assertEquals(5500, resultEmployees.get(0).getSalary());
+        assertEquals("Mary", resultEmployees.get(1).getName());
+        assertEquals(20, resultEmployees.get(1).getAge());
+        assertEquals("Female", resultEmployees.get(1).getGender());
+        assertEquals(500, resultEmployees.get(1).getSalary());
+    }
 }

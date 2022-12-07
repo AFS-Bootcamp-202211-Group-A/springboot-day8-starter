@@ -40,4 +40,8 @@ public class EmployeeService {
     public List<Employee> findByGender(String gender) {
         return employeeRepository.findByGender(gender);
     }
+
+    public List<Employee> findByPage(int page, int pageSize) {
+        return employeeRepository.findByPage(page,pageSize);
+    }
 }
