@@ -72,4 +72,22 @@ public class EmployeeControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].gender").value("Male"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].salary").value(5000));
     }
+    @Test
+    void should_get_employees_when_perform_get_given_employees_and_page_and_pageSize() throws Exception{
+        //given
+
+        Employee bob = employeeRepository.create(new Employee(10, "Bob",23, "Male", 5000));
+        employeeRepository.create(new Employee(11, "Clara",13, "Female", 50000));
+        employeeRepository.create(new Employee(12, "Peter",22, "Male", 8000));
+        //when & should
+        client.perform(MockMvcRequestBuilders.get("/employees?page={page}&pageSize={pageSize}", 1,2))
+                // 1. assert response status
+                .andExpect((MockMvcResultMatchers.status().isOk()))
+                // 2. assert response data
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Clara"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].age").value(23))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].gender").value("Female"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].salary").value(5000));
+    }
 }
