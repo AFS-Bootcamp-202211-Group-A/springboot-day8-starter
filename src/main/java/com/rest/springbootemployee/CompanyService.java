@@ -22,4 +22,12 @@ public class CompanyService {
         }
         return existingCompany;
     }
+
+    public Company findById(Integer id) {
+        return companyRepository.findById(id);
+    }
+
+    public List<Company> findByPage(int page, int pageSize) {
+        return companyRepository.findByPage(page, pageSize);
+    }
 }

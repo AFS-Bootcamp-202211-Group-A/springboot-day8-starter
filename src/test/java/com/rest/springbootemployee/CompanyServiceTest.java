@@ -54,4 +54,43 @@ public class CompanyServiceTest {
         assertEquals(toUpdateCompany.getName(), updatedCompany.getName());
     }
 
+    @Test
+    void should_get_company_by_id_when_perform_get_by_id_through_service_given_companies() {
+        // given
+        int companyId = 1;
+        Company company = new Company(companyId, "company1", null);
+        when(companyRepository.findById(company.getId())).thenReturn(company);
+        // when
+        Company company_s = companyService.findById(company.getId());
+        // then
+
+        verify(companyRepository).findById(company_s .getId());
+        assertEquals(company_s.getName(), company.getName());
+        assertEquals(company_s.getEmployees(), company.getEmployees());
+
+    }
+
+    @Test
+    void should_get_company_by_page_and_pageSize_when_perform_get_by_page_and_pageSize_through_service_given_companies_and_page_and_pageSize() {
+        //given
+        List<Company> companies = new ArrayList<>();
+        Company company1 = new Company(1, "company1", null);
+        Company company2 = new Company(2, "company2", null);
+        companies.add(company1);
+        companies.add(company2);
+
+        when(companyRepository.findByPage(1, 2)).thenReturn(companies);
+
+        //when
+        List<Company> results = companyService.findByPage(1,2);
+
+        //then
+        verify(companyRepository).findByPage(1,2);
+        assertThat(results, hasSize(2));
+        assertEquals(company1, results.get(0));
+        assertEquals(company2, results.get(1));
+
+    }
+
+
 }
