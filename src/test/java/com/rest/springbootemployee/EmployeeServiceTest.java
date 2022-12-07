@@ -126,7 +126,16 @@ class EmployeeServiceTest {
 
     @Test
     void should_delete_employee_when_delete_given_employee_id(){
+        int id = 1;
+        ArrayList<Employee> employees = new ArrayList<>();
+        Employee employee6 = new Employee(id, "Dummy3", 18, "Male", 12000);
+        employees.add(employee6);
 
+        employeeService.delete(id);
+
+        assertThat(employeeRepository.findAll(), hasSize(0));
+//        assertThat(employeeRepository.employees, hasSize(1));
+        verify(employeeRepository).delete(id);
 
     }
 

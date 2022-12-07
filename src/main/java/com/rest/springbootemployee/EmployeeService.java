@@ -40,12 +40,15 @@ public class EmployeeService {
 
     public Employee create(Employee employee) {
         return employeeRepository.create(employee);
-        //meaningless if written like this
     }
 
 
     public List<Employee> findByPage(int page, int pageSize) {
         return employeeRepository.findByPage(page,pageSize);
 
+    }
+
+    public void delete(Integer id) {
+        employeeRepository.delete(id);
     }
 }
