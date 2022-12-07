@@ -110,12 +110,19 @@ class EmployeeServiceTest {
 
     }
 
+    @Test
+    void should_return_employee_when_create_given_employee(){
+        Employee employee3 = new Employee(1, "Dummy3", 18, "Male", 12000);
+
+        when(employeeRepository.generateNextId()).thenReturn(1);
+
+        Employee createdEmployee = employeeService.create(employee3);
+
+        assertThat(createdEmployee, equalTo(employee3));
+//        assertThat(employeeRepository.employees, hasSize(1));
 
 
-
-
-
-
+    }
 
 
 }

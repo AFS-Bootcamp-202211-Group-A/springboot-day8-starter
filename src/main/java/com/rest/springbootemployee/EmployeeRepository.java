@@ -34,14 +34,9 @@ public class EmployeeRepository {
                 .collect(Collectors.toList());
     }
 
-    public Employee create(Employee employee) {
-        Integer nextId = generateNextId();
-        employee.setId(nextId);
-        employees.add(employee);
-        return employee;
-    }
 
-    private Integer generateNextId() {
+
+    public Integer generateNextId() {
         int maxId = employees.stream()
                 .mapToInt(employee -> employee.getId())
                 .max()
@@ -50,7 +45,7 @@ public class EmployeeRepository {
     }
 
 
-    public void delete(Integer id) {
+    public void delete(Integer id)  throws NoEmployeeFoundException{
         Employee existingEmployee = findById(id);
         employees.remove(existingEmployee);
     }
@@ -64,6 +59,13 @@ public class EmployeeRepository {
 
     public void clearAll(){
         employees.clear();
+    }
+
+    public Employee create(Employee employee) {
+        Integer nextId = generateNextId();
+        employee.setId(nextId);
+        employees.add(employee);
+        return employee;
     }
 }
 
