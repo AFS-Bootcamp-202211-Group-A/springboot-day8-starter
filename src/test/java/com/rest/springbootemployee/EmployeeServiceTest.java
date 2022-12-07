@@ -178,4 +178,32 @@ public class EmployeeServiceTest {
         //spy
         verify(employeeRepository).delete(employeeId);
     }
+
+    @Test
+    void should_get_employees_when_get_by_page_given_employee_pageSize_and_page_number() {
+        //given
+        int page = 1;
+        int pageSize = 2;
+        List<Employee> employees = new ArrayList<>();
+        Employee employee1 = new Employee(1, "Susan1", 22, "female", 10000);
+        Employee employee2 = new Employee(2, "Susan2", 22, "female", 10000);
+        employees.add(employee1);
+        employees.add(employee2);
+        when(employeeRepository.findByPage(page,pageSize)).thenReturn(employees);
+
+        //when
+        List<Employee> result = employeeService.findByPage(page, pageSize);
+
+        //then
+        //1. verify data
+        assertThat(result, hasSize(2));
+        assertThat(result.get(0), equalTo(employee1));
+        assertThat(result.get(1), equalTo(employee2));
+
+
+        //2. verify interaction
+        //spy
+        verify(employeeRepository).findByPage(page, pageSize);
+    }
+
 }
