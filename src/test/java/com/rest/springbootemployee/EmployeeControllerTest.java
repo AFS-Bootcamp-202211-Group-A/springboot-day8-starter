@@ -1,5 +1,6 @@
 package com.rest.springbootemployee;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rest.springbootemployee.Employee;
 import com.rest.springbootemployee.EmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,12 +8,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -98,5 +101,33 @@ public class EmployeeControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[*].salary", containsInAnyOrder(10000, 20000)));
 
         //then
+    }
+
+    @Test
+    void should_add_employee_when_perform_add_given_employees() throws Exception {
+        // given
+        Employee susan = new Employee(10, "Susan", 22, "Female", 10000);
+
+        // when & then
+        client.perform(MockMvcRequestBuilders.post("/employees")
+                        .content(asJsonString(susan))
+                        .contentType(MediaType.APPLICATION_JSON))
+                // 1. assert response code
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                // 2. assert response data
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Susan"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.age").value(22))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.gender").value("Female"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(10000));
+        assertEquals(1, employeeRepository.findAll().size());
+    }
+    private String asJsonString(final Object obj) {
+        try {
+            final ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
