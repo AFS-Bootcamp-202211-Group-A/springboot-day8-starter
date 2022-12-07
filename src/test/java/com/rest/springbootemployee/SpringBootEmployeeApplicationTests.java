@@ -160,4 +160,21 @@ class SpringBootEmployeeApplicationTests {
 		assertThat(employee.getGender(), equalTo("Male"));
 	}
 
+	@Test
+	void should_delete_existing_employee_when_perform_delete_given_employee() throws Exception {
+		Employee tom = employeeRepository.create(new Employee(1, "Tom", 19, "Male", 15000));
+
+
+		//given
+
+		//when
+		client.perform(MockMvcRequestBuilders.delete("/employees/{id}", tom.getId()))
+				.andExpect(MockMvcResultMatchers.status().isNoContent());
+
+
+		//then
+		List<Employee> employees = employeeRepository.findAll();
+		assertThat(employees, empty());
+	}
+
 }
