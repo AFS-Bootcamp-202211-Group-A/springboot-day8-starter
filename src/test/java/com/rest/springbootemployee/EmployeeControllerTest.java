@@ -131,7 +131,6 @@ public class EmployeeControllerTest {
         assertEquals("Female", employee.getGender());
         assertEquals(10000, employee.getSalary());
     }
-
     private String asJsonString(final Object obj) {
         try {
             final ObjectMapper mapper = new ObjectMapper();
