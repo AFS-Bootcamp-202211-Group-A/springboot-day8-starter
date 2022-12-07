@@ -89,6 +89,20 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("c2"));
     }
 
+    @Test
+    void should_create_company_when_perform_post_given_company() throws Exception {
+        // given
+        Company company = new Company(1, "JaneStreet", null);
+        // when & then
+        client.perform(MockMvcRequestBuilders.post("/companies")
+                        .content(new ObjectMapper().writeValueAsString(company))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("JaneStreet"));
+
+        Company returnedCompany = companyRepository.findAll().get(0);
+        assertEquals(returnedCompany.getName(), "JaneStreet");
+    }
 
 
 }
