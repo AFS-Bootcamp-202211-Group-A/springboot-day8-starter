@@ -99,6 +99,34 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Company B"));
     }
 
+    @Test
+    void should_get_new_company_when_create_given_company() throws Exception {
+        //given
+        List<Employee> employees = new ArrayList<>();
+        Company company = new Company(10, "Company", employees);
 
+        //when&then
+        client.perform(MockMvcRequestBuilders.post("/companies")
+                .content(asJsonString(company))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Company"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees").isArray());
+
+        //then
+        List<Company> companies = companyRepository.findAll();
+        assertThat(companies, hasSize(1));
+        Company repoCompany= companies.get(0);
+        assertThat(repoCompany.getName(), equalTo("Company"));
+        assertThat(repoCompany.getEmployees(), equalTo(employees));
+    }
+
+   
+
+
+    public static String asJsonString(final Object obj) throws JsonProcessingException {
+        return new ObjectMapper().writeValueAsString(obj);
+    }
 
 }
