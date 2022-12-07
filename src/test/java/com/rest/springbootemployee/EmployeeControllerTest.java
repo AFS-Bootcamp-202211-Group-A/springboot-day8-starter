@@ -34,7 +34,7 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    void should_get_all_employee_when_perform_getAll_given_employees() throws Exception {
+    void should_return_all_employee_when_perform_get_all_given_employees() throws Exception {
         // given
         employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
         employeeRepository.create(new Employee(11, "Bob", 11, "Male", 1000));
@@ -51,7 +51,7 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    void should_get_employee_by_id_when_perform_get_by_id_given_employees() throws Exception {
+    void should_return_employee_by_id_when_perform_find_by_id_given_employees() throws Exception {
         //given
         Employee jenny = employeeRepository.create(new Employee(10, "Jenny", 22, "Female", 10000));
         employeeRepository.create(new Employee(11, "Ken", 22, "Male", 20000));
@@ -66,7 +66,7 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    void should_get_employee_by_gender_when_perform_get_by_gender_given_employees() throws Exception {
+    void should_return_employee_by_gender_when_perform_find_by_gender_given_employees() throws Exception {
         // given
         Employee susan = employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
         employeeRepository.create(new Employee(11, "Bob", 11, "Male", 1000));
@@ -82,7 +82,7 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    void should_get_employee_by_page_and_pageSize_when_perform_get_by_page_and_pageSize_given_employees_and_page_and_pageSize() throws Exception {
+    void should_return_employee_by_page_and_pageSize_when_perform_find_by_page_and_pageSize_given_employees() throws Exception {
         //given
         employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
         employeeRepository.create(new Employee(11, "Bob", 23, "Male", 20000));
@@ -99,7 +99,7 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    void should_add_employee_when_perform_add_given_employees() throws Exception {
+    void should_create_employee_when_perform_create_given_employee() throws Exception {
         // given
         Employee susan = new Employee(10, "Susan", 22, "Female", 10000);
 
@@ -131,27 +131,27 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    void should_update_employee_when_perform_put_given_employee_with_id() throws Exception {
+    void should_update_employee_when_should_update_given_employee_with_id() throws Exception {
         // given
-        Employee updateSusan = new Employee(null, "Susan", 24, "Female", 30000);
-        Employee susan = employeeRepository.create(new Employee(1, "Susan", 22, "Female", 10000));
+        Employee toUpdateEmployee = new Employee(null, "Susan", 24, "Female", 30000);
+        Employee employee = employeeRepository.create(new Employee(1, "Susan", 22, "Female", 10000));
 
         // when & then
-        client.perform(MockMvcRequestBuilders.put("/employees/{id}", susan.getId())
-                .content(asJsonString(updateSusan))
+        client.perform(MockMvcRequestBuilders.put("/employees/{id}", employee.getId())
+                .content(asJsonString(toUpdateEmployee))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.age").value(24))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(30000));
 
-        List<Employee> employees = employeeRepository.findAll();
-        assertThat(employees, hasSize(1));
-        Employee employee = employees.get(0);
-        assertEquals("Susan", employee.getName());
-        assertEquals(24, employee.getAge());
-        assertEquals("Female", employee.getGender());
-        assertEquals(30000, employee.getSalary());
+        List<Employee> returnedEmployees = employeeRepository.findAll();
+        assertThat(returnedEmployees, hasSize(1));
+        Employee returnedEmployee = returnedEmployees.get(0);
+        assertEquals("Susan", returnedEmployee.getName());
+        assertEquals(24, returnedEmployee.getAge());
+        assertEquals("Female", returnedEmployee.getGender());
+        assertEquals(30000, returnedEmployee.getSalary());
     }
 
     @Test

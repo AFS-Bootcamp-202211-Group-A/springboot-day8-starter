@@ -35,7 +35,7 @@ public class CompanyControllerTest {
     }
 
     @Test
-    void should_get_all_companies_when_perform_getAll_given_companies() throws Exception {
+    void should_return_all_companies_when_perform_get_all_given_companies() throws Exception {
         // given
         companyRepository.create(new Company(1, "Company1", null));
         companyRepository.create(new Company(2, "Company2", null));
@@ -48,19 +48,19 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[*].name", containsInAnyOrder("Company1", "Company2")));
     }
     @Test
-    void should_get_company_by_id_when_perform_get_by_id_given_company() throws Exception {
+    void should_return_company_by_id_when_perform_find_by_id_given_companies() throws Exception {
         //given
-        Company company1 = companyRepository.create(new Company(1, "Company1", null));
+        Company company = companyRepository.create(new Company(1, "Company1", null));
         companyRepository.create(new Company(2, "Company2", null));
 
         //when & then
-        client.perform(MockMvcRequestBuilders.get("/companies/{id}", company1.getId()))
+        client.perform(MockMvcRequestBuilders.get("/companies/{id}", company.getId()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Company1"));
     }
 
     @Test
-    void should_get_company_by_page_and_pageSize_when_perform_get_by_page_and_pageSize_given_companies_and_page_and_pageSize() throws Exception {
+    void should_return_company_by_page_and_pageSize_when_perform_find_by_page_and_pageSize_given_companies() throws Exception {
         //given
         companyRepository.create(new Company(1, "Company1", null));
         companyRepository.create(new Company(2, "Company2", null));
@@ -72,7 +72,7 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[*].name", containsInAnyOrder("Company1", "Company2")));
     }
     @Test
-    void should_get_employee_by_company_id_when_perform_get_by_id_given_companies() throws Exception {
+    void should_return_employee_by_company_id_when_perform_get_employee_given_companies() throws Exception {
         //given
         List<Employee> employees = Arrays.asList(
                 new Employee(1, "Lily", 20, "Female", 8000),
@@ -94,15 +94,13 @@ public class CompanyControllerTest {
     }
 
     @Test
-    void should_add_company_when_perform_post_given_new_company() throws Exception {
+    void should_create_company_when_perform_create_given_company() throws Exception {
         // given
-        Company company1 = new Company(1, "Company1", null);
-        // object -> json
-        String newcompany1Json = new ObjectMapper().writeValueAsString(company1);
+        Company company = new Company(1, "Company1", null);
         
         // when & then
         client.perform(MockMvcRequestBuilders.post("/companies")
-                .content(newcompany1Json)
+                .content(new ObjectMapper().writeValueAsString(company))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
@@ -110,19 +108,19 @@ public class CompanyControllerTest {
 
         List<Company> companies = companyRepository.findAll();
         assertThat(companies, hasSize(1));
-        Company company = companies.get(0);
-        assertThat(company.getName(), equalTo("Company1"));
+        Company returnedCompany = companies.get(0);
+        assertThat(returnedCompany.getName(), equalTo("Company1"));
     }
 
     @Test
-    void should_update_company_when_perform_put_given_employee_with_id() throws Exception {
+    void should_update_company_when_perform_update_given_companies() throws Exception {
         // given
-        Company updatedCompany1 = new Company(1, "Company1_updateName", null);
-        Company company1 = companyRepository.create(new Company(1, "Company1", null));
+        Company toUpdateCompany = new Company(1, "Company1_updateName", null);
+        Company company = companyRepository.create(new Company(1, "Company1", null));
         
         // when & then
-        String updateCompany1Json = new ObjectMapper().writeValueAsString(updatedCompany1);
-        client.perform(MockMvcRequestBuilders.put("/companies/{id}", company1.getId())
+        String updateCompany1Json = new ObjectMapper().writeValueAsString(toUpdateCompany);
+        client.perform(MockMvcRequestBuilders.put("/companies/{id}", company.getId())
                 .content(updateCompany1Json)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -138,16 +136,16 @@ public class CompanyControllerTest {
     @Test
     void should_delete_company_when_perform_delete_given_company() throws Exception {
         // given
-        Company company1 = companyRepository.create(new Company(1, "Company1", null));
+        Company company = companyRepository.create(new Company(1, "Company1", null));
         companyRepository.create(new Company(2, "Company2", null));
         
         // when & then
-        client.perform(MockMvcRequestBuilders.delete("/companies/{id}", company1.getId()))
+        client.perform(MockMvcRequestBuilders.delete("/companies/{id}", company.getId()))
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
 
         List<Company> companies = companyRepository.findAll();
         assertThat(companies, hasSize(1));
-        Company company = companies.get(0);
-        assertEquals("Company2", company.getName());
+        Company returnedCompany = companies.get(0);
+        assertEquals("Company2", returnedCompany.getName());
     }
 }

@@ -32,15 +32,15 @@ public class EmployeeServiceTest {
         when(employeeRepository.findAll()).thenReturn(employees);
 
         // when
-        List<Employee> results = employeeService.findAll();
+        List<Employee> returnedEmployees = employeeService.findAll();
 
         // then
-        assertThat(results, hasSize(1));
-        assertEquals(employee, results.get(0));
+        assertThat(returnedEmployees, hasSize(1));
+        assertEquals(employee, returnedEmployees.get(0));
         verify(employeeRepository).findAll();
     }
     @Test
-    void should_update_age_and_salary_only_when_update_all_given_employees() {
+    void should_update_age_and_salary_only_when_update_given_employee() {
         // given
         int employeeId = 1;
         Employee employee = new Employee(employeeId, "Susan", 22, "Female", 10000);
@@ -59,7 +59,7 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    void should_get_employee_by_id_when_perform_get_by_id_through_service_given_employees() {
+    void should_return_employee_by_id_when_perform_find_by_id_given_employees() {
         // given
         Employee employee = new Employee(10, "Susan", 22, "Female", 10000);
         when(employeeRepository.findById(employee.getId())).thenReturn(employee);
@@ -85,16 +85,16 @@ public class EmployeeServiceTest {
         when(employeeRepository.findByGender(gender)).thenReturn(employees);
 
         // when
-        List<Employee> results = employeeService.findByGender(gender);
+        List<Employee> returnedEmployees = employeeService.findByGender(gender);
 
         // then
         verify(employeeRepository).findByGender(gender);
-        assertThat(results, hasSize(1));
-        assertEquals(employee, results.get(0));
+        assertThat(returnedEmployees, hasSize(1));
+        assertEquals(employee, returnedEmployees.get(0));
     }
 
     @Test
-    void should_get_employee_by_page_and_pageSize_when_perform_get_by_page_and_pageSize_through_service_given_employees_and_page_and_pageSize() {
+    void should_return_employee_by_page_and_pageSize_when_perform_find_by_page_and_pageSize_given_employees() {
         //given
         List<Employee> employees = new ArrayList<>();
         Employee susan = employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
@@ -106,27 +106,27 @@ public class EmployeeServiceTest {
         when(employeeRepository.findByPage(1, 2)).thenReturn(employees);
 
         //when
-        List<Employee> results = employeeService.findByPage(1,2);
+        List<Employee> returnedEmployees = employeeService.findByPage(1,2);
 
         //then
         verify(employeeRepository).findByPage(1,2);
-        assertThat(results, hasSize(2));
-        assertEquals(susan, results.get(0));
-        assertEquals(bob, results.get(1));
+        assertThat(returnedEmployees, hasSize(2));
+        assertEquals(susan, returnedEmployees.get(0));
+        assertEquals(bob, returnedEmployees.get(1));
     }
 
     @Test
-    void should_add_employee_when_perform_through_service_add_given_employees() {
+    void should_create_employee_when_perform_create_given_employee() {
         //given
         Employee susan = new Employee(10, "Susan", 22, "Female", 10000);
         when(employeeRepository.create(susan)).thenReturn(susan);
 
         //when
-        Employee result = employeeService.create(susan);
+        Employee returnedEmployee = employeeService.create(susan);
 
         //then
         verify(employeeRepository).create(susan);
-        assertEquals(susan, result);
+        assertEquals(susan, returnedEmployee);
     }
     @Test
     void should_delete_employee_when_perform_delete_given_employees() {

@@ -33,16 +33,16 @@ public class CompanyServiceTest {
         when(companyRepository.findAll()).thenReturn(companies);
 
         // when
-        List<Company> results = companyService.findAll();
+        List<Company> returnedCompanies = companyService.findAll();
 
         // then
-        assertThat(results, hasSize(1));
-        assertEquals(company, results.get(0));
+        assertThat(returnedCompanies, hasSize(1));
+        assertEquals(company, returnedCompanies.get(0));
         verify(companyRepository).findAll();
     }
 
     @Test
-    void should_get_company_by_id_when_perform_get_by_id_through_service_given_companies() {
+    void should_return_company_by_id_when_perform_find_by_id_given_companies() {
         // given
         List<Employee> employees = Arrays.asList(new Employee(1,"Susan", 22, "Female",1000));
         Company company = new Company(1, "spring", employees);
@@ -93,7 +93,7 @@ public class CompanyServiceTest {
         assertEquals(employees, returnedEmployees);
     }
     @Test
-    void should_get_company_by_page_and_pageSize_when_perform_get_by_page_and_pageSize_through_service_given_companies() {
+    void should_return_company_by_page_and_pageSize_when_perform_find_by_page_and_pageSize_given_companies() {
         //given
         List<Employee> employees = Arrays.asList(
                 new Employee(1, "Sam", 20, "Male", 200000),
@@ -113,7 +113,7 @@ public class CompanyServiceTest {
     }
 
     @Test
-    void should_add_company_when_perform_through_service_add_given_companies() {
+    void should_create_company_when_perform_create_given_company() {
         //given
         List<Employee> employees = Arrays.asList(
                 new Employee(1, "Sam", 20, "Male", 200000),
