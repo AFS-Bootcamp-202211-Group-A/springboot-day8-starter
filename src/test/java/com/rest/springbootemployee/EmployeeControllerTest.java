@@ -139,4 +139,30 @@ public class EmployeeControllerTest {
             throw new RuntimeException(e);
         }
     }
+
+    @Test
+    void should_update_employee_when_perform_put_given_employee_with_id() throws Exception {
+        // given
+
+        Employee updateSusan = new Employee(null, "Susan", 24, "Female", 30000);
+        Employee susan = employeeRepository.create(new Employee(1, "Susan", 22, "Female", 10000));
+        // when & then
+        client.perform(MockMvcRequestBuilders.put("/employees/{id}", susan.getId())
+                .content(asJsonString(updateSusan))
+                .contentType(MediaType.APPLICATION_JSON))
+                // 1. assert response code
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                // 2. assert response data
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.age").value(24))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(30000));
+
+        List<Employee> employees = employeeRepository.findAll();
+        assertThat(employees, hasSize(1));
+        Employee employee = employees.get(0);
+        assertEquals("Susan", employee.getName());
+        assertEquals(24, employee.getAge());
+        assertEquals("Female", employee.getGender());
+        assertEquals(30000, employee.getSalary());
+    }
 }
