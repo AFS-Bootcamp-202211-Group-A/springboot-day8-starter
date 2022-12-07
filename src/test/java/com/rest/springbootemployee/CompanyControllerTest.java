@@ -122,7 +122,31 @@ public class CompanyControllerTest {
         assertThat(repoCompany.getEmployees(), equalTo(employees));
     }
 
-   
+    @Test
+    void should_update_company_when_update_given_company_and_id() throws Exception {
+        //given
+        List<Employee> employees = new ArrayList<>();
+        Company company = new Company(10, "Company", employees);
+        companyRepository.create(company);
+        Company companyUpdated = new Company(10, "Company Updated", employees);
+
+
+        client.perform(MockMvcRequestBuilders.put("/companies/{id}", company.getId())
+                .content(asJsonString(companyUpdated))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Company Updated"));
+
+        List<Company> companies = companyRepository.findAll();
+        assertThat(companies, hasSize(1));
+        Company repoCompany= companies.get(0);
+        assertThat(repoCompany.getName(), equalTo("Company Updated"));
+        assertThat(repoCompany.getEmployees(), equalTo(employees));
+
+    }
+
+
 
 
     public static String asJsonString(final Object obj) throws JsonProcessingException {
