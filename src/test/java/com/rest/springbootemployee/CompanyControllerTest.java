@@ -104,5 +104,21 @@ public class CompanyControllerTest {
         assertEquals(returnedCompany.getName(), "JaneStreet");
     }
 
+    @Test
+    void should_update_when_perform_put_given_company() throws Exception {
+        // given
+        Company newCompany = new Company(1, "MorganStanley", null);
+        Company oldCompany = companyRepository.create(new Company(1, "JPMorgan", null));
+        // when & then
+        client.perform(MockMvcRequestBuilders.put("/companies/{id}", oldCompany.getId())
+                        .content(new ObjectMapper().writeValueAsString(newCompany))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("MorganStanley"));
+
+        Company result = companyRepository.findAll().get(0);
+        assertEquals("MorganStanley", result.getName());
+    }
+
 
 }
