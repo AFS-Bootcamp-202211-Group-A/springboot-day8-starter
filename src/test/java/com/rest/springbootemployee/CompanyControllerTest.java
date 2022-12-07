@@ -32,7 +32,7 @@ public class CompanyControllerTest {
     @Test
     void should_get_all_employees_when_perform_get_given_employees() throws Exception {
         //given
-        Employee susan = new Employee(1, "Susan", 22, "Female`", 10000);
+        Employee susan = new Employee(1, "Susan", 22, "Female", 10000);
         Employee tom = new Employee(2, "Tom", 23, "Male", 20000);
         Employee sam = new Employee(3, "Sam", 24, "Male", 30000);
         companyRepository.create(new Company(1, "spring", new ArrayList<>(Arrays.asList(susan, tom)) ));
@@ -51,7 +51,7 @@ public class CompanyControllerTest {
     @Test
     void should_get_company_when_perform_get_by_id_given_companies() throws Exception {
         //given
-        Employee susan = new Employee(1, "Susan", 22, "Female`", 10000);
+        Employee susan = new Employee(1, "Susan", 22, "Female", 10000);
         Employee tom = new Employee(2, "Tom", 23, "Male", 20000);
         Employee sam = new Employee(3, "Sam", 24, "Male", 30000);
         Company spring = companyRepository.create(new Company(1, "spring", new ArrayList<>(Arrays.asList(susan, tom)) ));
@@ -61,6 +61,29 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(spring.getName()));
+
+        //then
+    }
+
+    @Test
+    void should_get_employees_of_the_company_when_get_employees_by_company_given_companies() throws Exception{
+        //given
+        Employee susan = new Employee(1, "Susan", 22, "Female", 10000);
+        Employee tom = new Employee(2, "Tom", 23, "Male", 20000);
+        Employee sam = new Employee(3, "Sam", 24, "Male", 30000);
+        Company spring = companyRepository.create(new Company(1, "spring", new ArrayList<>(Arrays.asList(susan, tom)) ));
+        companyRepository.create(new Company(2, "boot",  new ArrayList<>(Arrays.asList(sam))));
+        //when
+
+
+        client.perform(MockMvcRequestBuilders.get("/companies/{id}/employees", spring.getId()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[*].name", containsInAnyOrder("Susan", "Tom")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[*].age", containsInAnyOrder(22, 23)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[*].salary", containsInAnyOrder(10000, 20000)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[*].gender", containsInAnyOrder("Female", "Male")));
 
         //then
     }
