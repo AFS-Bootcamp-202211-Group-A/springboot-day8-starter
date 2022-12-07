@@ -85,11 +85,29 @@ class CompanyControllerTest {
     }
 
     @Test
-    void should_get_companies_by_page_when_perform_get_given_page_and_pageSize() {
+    void should_get_companies_by_page_when_perform_get_given_page_and_pageSize() throws Exception {
+        //given
+        List<Employee> employees = new ArrayList<>();
+        companyRepository.create(new Company(2, "Dummy Company1", employees));
+        companyRepository.create(new Company(3, "Dummy Company2", employees));
+        companyRepository.create(new Company(10, "Dummy Company3", employees));
+
+        //when
+
+        client.perform(MockMvcRequestBuilders.get("/companies?page={page}&pageSize={pageSize}", 1, 2))
+                // 1. assert response status
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                // 2. assert response data
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Dummy Company1"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Dummy Company2"));
+
     }
 
     @Test
     void should_get_created_company_when_perform_create_given_company() {
+
     }
 
     @Test

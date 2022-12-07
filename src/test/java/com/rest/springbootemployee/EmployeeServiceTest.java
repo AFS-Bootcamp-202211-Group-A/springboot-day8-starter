@@ -85,7 +85,6 @@ class EmployeeServiceTest {
     void should_return_employee_by_gender_when_find_by_gender_given_employees(){
 
         ArrayList<Employee> employees = new ArrayList<>();
-        ArrayList<Employee> filteredEmployees = new ArrayList<>();
         Employee employee1 = new Employee(1, "Dummy1", 20, "Male", 13213);
         Employee employee2 = new Employee(2, "Dummy2", 21, "Male", 10000);
         employees.add(employee1);
@@ -123,9 +122,8 @@ class EmployeeServiceTest {
     @Test
     void should_delete_employee_when_delete_given_employee_id(){
         int id = 1;
-        ArrayList<Employee> employees = new ArrayList<>();
         Employee employee6 = new Employee(id, "Dummy3", 18, "Male", 12000);
-        employees.add(employee6);
+        employeeRepository.create(employee6);
 
         employeeService.delete(id);
 
