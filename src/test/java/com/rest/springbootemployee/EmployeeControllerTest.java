@@ -38,11 +38,10 @@ public class EmployeeControllerTest {
         // given
         employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
         employeeRepository.create(new Employee(11, "Bob", 11, "Male", 1000));
+        
         // when & then
         client.perform(MockMvcRequestBuilders.get("/employees"))
-                // 1. assert response code
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                // 2. assert response data
                 .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").isNumber())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[*].name", containsInAnyOrder("Susan", "Bob")))
@@ -56,16 +55,14 @@ public class EmployeeControllerTest {
         //given
         Employee jenny = employeeRepository.create(new Employee(10, "Jenny", 22, "Female", 10000));
         employeeRepository.create(new Employee(11, "Ken", 22, "Male", 20000));
+        
         //when
         client.perform(MockMvcRequestBuilders.get("/employees/{id}", jenny.getId()))
-                // 1. assert response status
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                // 2. assert response data
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Jenny"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.age").value(22))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.gender").value("Female"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(10000));
-        //then
     }
 
     @Test
@@ -73,11 +70,10 @@ public class EmployeeControllerTest {
         // given
         Employee susan = employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
         employeeRepository.create(new Employee(11, "Bob", 11, "Male", 1000));
+
         // when & then
         client.perform(MockMvcRequestBuilders.get("/employees?gender={gender}", susan.getGender()))
-                // 1. assert response code
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                // 2. assert response data
                 .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Susan"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].age").value(22))
@@ -91,18 +87,15 @@ public class EmployeeControllerTest {
         employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
         employeeRepository.create(new Employee(11, "Bob", 23, "Male", 20000));
         employeeRepository.create(new Employee(13, "Bob3", 24, "Male", 20000));
+
         //when
         client.perform(MockMvcRequestBuilders.get("/employees?page={page}&pageSize={pageSize}", 1, 2))
-                // 1. assert response status
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                // 2. assert response data
                 .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[*].name", containsInAnyOrder("Susan", "Bob")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[*].age", containsInAnyOrder(22, 23)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[*].gender", containsInAnyOrder("Female", "Male")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[*].salary", containsInAnyOrder(10000, 20000)));
-
-        //then
     }
 
     @Test
@@ -114,9 +107,7 @@ public class EmployeeControllerTest {
         client.perform(MockMvcRequestBuilders.post("/employees")
                         .content(asJsonString(susan))
                         .contentType(MediaType.APPLICATION_JSON))
-                // 1. assert response code
                 .andExpect(MockMvcResultMatchers.status().isCreated())
-                // 2. assert response data
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Susan"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.age").value(22))
@@ -142,16 +133,14 @@ public class EmployeeControllerTest {
     @Test
     void should_update_employee_when_perform_put_given_employee_with_id() throws Exception {
         // given
-
         Employee updateSusan = new Employee(null, "Susan", 24, "Female", 30000);
         Employee susan = employeeRepository.create(new Employee(1, "Susan", 22, "Female", 10000));
+
         // when & then
         client.perform(MockMvcRequestBuilders.put("/employees/{id}", susan.getId())
                 .content(asJsonString(updateSusan))
                 .contentType(MediaType.APPLICATION_JSON))
-                // 1. assert response code
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                // 2. assert response data
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.age").value(24))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(30000));
@@ -170,6 +159,7 @@ public class EmployeeControllerTest {
         // given
         Employee susan = employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
         employeeRepository.create(new Employee(11, "Bob", 23, "Male", 20000));
+
         // when & then
         client.perform(MockMvcRequestBuilders.delete("/employees/{id}", susan.getId()))
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
@@ -182,5 +172,4 @@ public class EmployeeControllerTest {
         assertEquals("Male", employee.getGender());
         assertEquals(20000, employee.getSalary());
     }
-
 }

@@ -30,8 +30,10 @@ public class EmployeeServiceTest {
         Employee employee = new Employee(10, "Susan", 22, "Female", 10000);
         employees.add(employee);
         when(employeeRepository.findAll()).thenReturn(employees);
+
         // when
         List<Employee> results = employeeService.findAll();
+
         // then
         assertThat(results, hasSize(1));
         assertEquals(employee, results.get(0));
@@ -46,6 +48,7 @@ public class EmployeeServiceTest {
         List<Employee> employees = new ArrayList<>();
         employees.add(employee);
         when(employeeRepository.findById(employeeId)).thenReturn(employee);
+
         // when & then
         Employee updatedEmployee = employeeService.update(employeeId, toUpdateEmployee);
         verify(employeeRepository).findById(employeeId);
@@ -60,8 +63,10 @@ public class EmployeeServiceTest {
         // given
         Employee employee = new Employee(10, "Susan", 22, "Female", 10000);
         when(employeeRepository.findById(employee.getId())).thenReturn(employee);
+
         // when
         Employee returnedEmployee = employeeService.findById(employee.getId());
+
         // then
         verify(employeeRepository).findById(employee.getId());
         assertEquals(returnedEmployee.getAge(), 22);
@@ -78,8 +83,10 @@ public class EmployeeServiceTest {
         Employee employee = new Employee(10, "Susan", 22, gender, 10000);
         employees.add(employee);
         when(employeeRepository.findByGender(gender)).thenReturn(employees);
+
         // when
         List<Employee> results = employeeService.findByGender(gender);
+
         // then
         verify(employeeRepository).findByGender(gender);
         assertThat(results, hasSize(1));
@@ -106,15 +113,12 @@ public class EmployeeServiceTest {
         assertThat(results, hasSize(2));
         assertEquals(susan, results.get(0));
         assertEquals(bob, results.get(1));
-
     }
 
     @Test
     void should_add_employee_when_perform_through_service_add_given_employees() {
         //given
         Employee susan = new Employee(10, "Susan", 22, "Female", 10000);
-        //Employee susan = employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
-
         when(employeeRepository.create(susan)).thenReturn(susan);
 
         //when
@@ -123,7 +127,6 @@ public class EmployeeServiceTest {
         //then
         verify(employeeRepository).create(susan);
         assertEquals(susan, result);
-
     }
     @Test
     void should_delete_employee_when_perform_delete_given_employees() {
@@ -131,8 +134,10 @@ public class EmployeeServiceTest {
         int employeeId = 1;
         Employee employee = new Employee(employeeId, "Susan", 22, "Female", 10000);
         employeeRepository.create(employee);
+
         // when
         employeeService.delete(employeeId);
+
         // then
         verify(employeeRepository).delete(employeeId);
         List<Employee> newEmployees = employeeRepository.findAll();

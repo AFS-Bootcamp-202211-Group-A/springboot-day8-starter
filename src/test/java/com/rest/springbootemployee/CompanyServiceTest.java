@@ -1,13 +1,10 @@
 package com.rest.springbootemployee;
 
-import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,8 +31,10 @@ public class CompanyServiceTest {
         Company company = new Company(1, "spring", null);
         companies.add(company);
         when(companyRepository.findAll()).thenReturn(companies);
+
         // when
         List<Company> results = companyService.findAll();
+
         // then
         assertThat(results, hasSize(1));
         assertEquals(company, results.get(0));
@@ -48,10 +47,11 @@ public class CompanyServiceTest {
         List<Employee> employees = Arrays.asList(new Employee(1,"Susan", 22, "Female",1000));
         Company company = new Company(1, "spring", employees);
         when(companyRepository.findById(company.getId())).thenReturn(company);
+
         // when
         companyService.findById(company.getId());
-        // then
 
+        // then
         verify(companyRepository).findById(company.getId());
         assertEquals(company.getName(), "spring");
         assertEquals(company.getEmployees(), employees);
@@ -66,6 +66,7 @@ public class CompanyServiceTest {
         List<Company> companies = new ArrayList<>();
         companies.add(company);
         when(companyRepository.findById(companyId)).thenReturn(company);
+
         // when & then
         Company updatedCompany = companyService.update(companyId, toUpdateCompany);
         verify(companyRepository).findById(companyId);
@@ -84,8 +85,10 @@ public class CompanyServiceTest {
         Company company = new Company(companyId, "spring", employees);
         when(companyRepository.findById(companyId)).thenReturn(company);
         when(companyRepository.getEmployees(companyId)).thenReturn(employees);
+
         //when
         List<Employee> returnedEmployees = this.companyService.getEmployees(1);
+
         //then
         assertEquals(employees, returnedEmployees);
     }
@@ -137,8 +140,10 @@ public class CompanyServiceTest {
         );
         Company company = new Company(companyId, "spring", employees);
         when(companyRepository.findById(companyId)).thenReturn(company);
+
         // when
         companyService.delete(companyId);
+
         // then
         verify(companyRepository).delete(companyId);
         List<Company> returnedCompanies = companyRepository.findAll();
