@@ -150,5 +150,25 @@ public class CompanyServiceTest {
         verify(companyRepository).create(company);
     }
 
+    @Test
+    void should_get_company_when_update_given_updated_company_and_id() {
+        //given
+        int id = 1;
+        Company companyUpdated = new Company(1, "Company Updated", new ArrayList<>());
+
+        when(companyRepository.update(id, companyUpdated)).thenReturn(companyUpdated);
+
+        //when
+        Company companyUpdatedReturned = companyService.update(companyUpdated, id);
+
+        //then
+        assertThat(companyUpdatedReturned.getId(), equalTo(id));
+        assertThat(companyUpdatedReturned.getName(), equalTo("Company Updated"));
+        assertThat(companyUpdatedReturned.getEmployees(), empty());
+
+        //spy
+        verify(companyRepository).update(id, companyUpdated);
+    }
+
 
 }
