@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -94,6 +95,13 @@ public class EmployeeControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.age").value(23))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.gender").value("Male"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(5000));
+
+        Employee newBob = employeeRepository.findAll().get(0);
+        assertEquals("Bob",newBob.getName());
+        assertEquals(23,newBob.getAge());
+        assertEquals("Male",newBob.getGender());
+        assertEquals(5000,newBob.getSalary());
+
     }
 
 }
