@@ -89,4 +89,16 @@ public class CompanyServiceTest {
         verify(companyRepository).findByPage(page, pageSize);
         assertEquals(companies.subList(0,1),resultCompanies);
     }
+    @Test
+    void should_create_company_when_post_given_company_details() {
+        Company company = new Company(100, "spring", new ArrayList<>());
+        when(companyRepository.create(company)).thenReturn(company);
+
+        Company createdCompany = companyService.create(company);
+
+        verify(companyRepository).create(company);
+        assertEquals(100, createdCompany.getId());
+        assertEquals("spring", createdCompany.getName());
+        assertEquals(new ArrayList<>(), createdCompany.getEmployees());
+    }
 }
