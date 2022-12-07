@@ -101,4 +101,17 @@ public class CompanyServiceTest {
         assertEquals("spring", createdCompany.getName());
         assertEquals(new ArrayList<>(), createdCompany.getEmployees());
     }
+    @Test
+    void should_update_company_when_put_given_companyId_and_company(){
+        Integer id = 100;
+        Company company = new Company(id, "spring", new ArrayList<>());
+        Company newCompany = new Company(id, "newSpring", new ArrayList<>());
+        when(companyRepository.findById(id)).thenReturn(company);
+
+        Company resultCompany = companyService.update(id,newCompany);
+
+        verify(companyRepository).findById(id);
+        assertEquals(100,resultCompany.getId());
+        assertEquals("newSpring", resultCompany.getName());
+    }
 }
