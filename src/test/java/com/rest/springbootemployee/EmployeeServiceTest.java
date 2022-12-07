@@ -35,8 +35,25 @@ public class EmployeeServiceTest {
         verify(employeeRepository).findAll();
         assertEquals(result,employeeList);
     }
+
     @Test
-    void should_update_employee_when_post_given_employee_id() {
+    void should_get_employee_when_perform_get_id_given_employees_and_ID(){
+        //given
+        Integer id = 2;
+        Employee oldBob = new Employee(1, "Bob", 20, "Male", 0);
+        Employee newBob = new Employee(2, "Bobe", 23, "Female", 5000);
+        when(employeeRepository.findById(id)).thenReturn(newBob);
+        //when
+        Employee returnEmployee = employeeService.findById(id);
+        //then
+        verify(employeeRepository).findById(id);
+        assertEquals(23,returnEmployee.getAge());
+        assertEquals(5000,returnEmployee.getSalary());
+        assertEquals("Bobe",returnEmployee.getName());
+        assertEquals("Female",returnEmployee.getGender());
+    }
+    @Test
+    void should_update_employee_when_put_given_employee_id() {
         //given
         Integer id = 10;
         Employee oldBob = new Employee(id, "Bob", 20, "Male", 0);
@@ -52,6 +69,8 @@ public class EmployeeServiceTest {
         assertEquals("Bob",updatedBob.getName());
         assertEquals("Male",updatedBob.getGender());
     }
+
+
 
     @Test
     void should_post_employee_when_perform_post_given_employees_details() {

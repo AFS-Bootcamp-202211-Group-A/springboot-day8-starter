@@ -17,6 +17,10 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
+    public Employee findById(@PathVariable Integer id) {
+        return employeeRepository.findById(id);
+    }
+
     public Employee update(Integer id, Employee employee) {
         Employee existingEmployee = employeeRepository.findById(id);
         if (employee.getAge() != null) {
