@@ -120,5 +120,14 @@ public class CompanyControllerTest {
         assertEquals("MorganStanley", result.getName());
     }
 
+    @Test
+    void should_delete_company_when_perform_delete_given_company() throws Exception {
+        // given
+        Company company = companyRepository.create(new Company(1, "MorganStanley", null));
+        // when & then
+        client.perform(MockMvcRequestBuilders.delete("/companies/{id}", company.getId()))
+                .andExpect((MockMvcResultMatchers.status().isNoContent()));
+        assertEquals(companyRepository.findAll().size(), 0);
+    }
 
 }
