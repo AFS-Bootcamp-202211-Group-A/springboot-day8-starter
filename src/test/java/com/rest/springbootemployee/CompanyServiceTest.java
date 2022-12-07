@@ -10,8 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -131,6 +130,24 @@ public class CompanyServiceTest {
         //2. verify interaction
         //spy
         verify(companyRepository).findByPage(page, pageSize);
+    }
+
+    @Test
+    void should_get_companies_when_create_given_company() {
+        //given
+        Company company = new Company(1, "Company A", new ArrayList<>());
+        when(companyRepository.create(company)).thenReturn(company);
+
+        //when
+        Company createdCompany = companyService.create(company);
+
+        //then
+        assertThat(createdCompany.getId(), equalTo(company.getId()));
+        assertThat(createdCompany.getName(), equalTo("Company A"));
+        assertThat(createdCompany.getEmployees(), empty());
+
+        //spy
+        verify(companyRepository).create(company);
     }
 
 
