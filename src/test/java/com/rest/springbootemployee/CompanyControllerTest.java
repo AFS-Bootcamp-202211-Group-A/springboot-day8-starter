@@ -49,4 +49,19 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").isNumber())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[*].name", containsInAnyOrder("Company1", "Company2")));
     }
+
+    @Test
+    void should_get_company_by_id_when_perform_get_by_id_given_company() throws Exception {
+        //given
+        Company company1 = companyRepository.create(new Company(1, "Company1", null));
+        companyRepository.create(new Company(2, "Company2", null));
+        //when
+        client.perform(MockMvcRequestBuilders.get("/companies/{id}", company1.getId()))
+                // 1. assert response status
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                // 2. assert response data
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Company1"));
+        //then
+    }
+
 }
