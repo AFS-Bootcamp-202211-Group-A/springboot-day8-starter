@@ -89,4 +89,23 @@ public class CompanyServiceTest {
         //then
         assertEquals(employees, returnedEmployees);
     }
+    @Test
+    void should_get_company_by_page_and_pageSize_when_perform_get_by_page_and_pageSize_through_service_given_companies() {
+        //given
+        List<Employee> employees = Arrays.asList(
+                new Employee(1, "Sam", 20, "Male", 200000),
+                new Employee(2, "Ken", 20, "Male", 200000)
+        );
+        List<Company> companies = Arrays.asList(
+                new Company(1, "spring", employees),
+                new Company(2, "boot", employees)
+        );
+        when(companyRepository.findByPage(1,2)).thenReturn(companies);
+        
+        //when
+        List<Company> returnedCompanies = this.companyService.findByPage(1,2);
+
+        //this
+        assertEquals(companies, returnedCompanies);
+    }
 }
