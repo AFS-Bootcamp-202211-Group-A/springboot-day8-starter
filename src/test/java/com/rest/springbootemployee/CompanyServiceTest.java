@@ -69,10 +69,25 @@ class CompanyServiceTest {
 
         when(companyRepository.findById(companyId)).thenReturn(company);
 
-        Company companyById = companyService.finById(companyId);
+        Company companyById = companyService.findById(companyId);
         assertThat(companyById.getName(), equalTo("Dummy Company"));
 
 
+
+    }
+
+    @Test
+    void should_return_employees_by_company_id_when_find_by_id_given_companies(){
+        int companyId = 1;
+        List<Employee> employees = new ArrayList<>();
+        employees.add(new Employee(10, "Susan", 22, "Female", 10000));
+        companyRepository.create(new Company(companyId, "Dummy Company", employees));
+
+        when(companyRepository.getEmployees(companyId)).thenReturn(employees);
+
+        List<Employee> retrievedEmployees = companyService.getEmployees(companyId);
+
+        assertThat(retrievedEmployees, equalTo(employees));
 
     }
 

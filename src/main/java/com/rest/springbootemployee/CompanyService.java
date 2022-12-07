@@ -21,9 +21,12 @@ public class CompanyService {
         return existingCompany;
     }
 
-    public Company finById(int companyId) {
-        return companyRepository.findById(companyId);
+
+    public Company findById(Integer id) {
+        return companyRepository.findById(id);
     }
 
-    
+    public List<Employee> getEmployees(int companyId) {
+        return companyRepository.getEmployees(companyId);
+    }
 }
