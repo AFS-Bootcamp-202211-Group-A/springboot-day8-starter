@@ -35,4 +35,8 @@ public class CompanyService {
     public Company update(Company companyUpdated, Integer id) {
         return companyRepository.update(id, companyUpdated);
     }
+
+    public void delete(Integer id) {
+        companyRepository.delete(id);
+    }
 }
