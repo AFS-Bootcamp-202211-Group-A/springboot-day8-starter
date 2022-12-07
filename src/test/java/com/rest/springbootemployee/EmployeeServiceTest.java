@@ -1,16 +1,20 @@
 package com.rest.springbootemployee;
 
+import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -85,5 +89,28 @@ public class EmployeeServiceTest {
         verify(employeeRepository).findByGender(gender);
         assertThat(results, hasSize(1));
         assertEquals(employee, results.get(0));
+    }
+
+    @Test
+    void should_get_employee_by_page_and_pageSize_when_perform_get_by_page_and_pageSize_through_service_given_employees_and_page_and_pageSize() throws Exception {
+        //given
+        List<Employee> employees = new ArrayList<>();
+        Employee susan = employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
+        Employee bob = employeeRepository.create(new Employee(11, "Bob", 23, "Male", 20000));
+        Employee bob3 = employeeRepository.create(new Employee(13, "Bob3", 24, "Male", 20000));
+        employees.add(susan);
+        employees.add(bob);
+
+        when(employeeRepository.findByPage(1, 2)).thenReturn(employees);
+
+        //when
+        List<Employee> results = employeeService.findByPage(1,2);
+
+        //then
+        verify(employeeRepository).findByPage(1,2);
+        assertThat(results, hasSize(2));
+        assertEquals(susan, results.get(0));
+        assertEquals(bob, results.get(1));
+
     }
 }
