@@ -10,14 +10,19 @@ import java.util.List;
 public class EmployeeController {
 
     private EmployeeRepository employeeRepository;
+    private EmployeeService employeeService;
 
     public EmployeeController(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
 
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
+
     @GetMapping
     public List<Employee> getAll() {
-        return employeeRepository.findAll();
+        return employeeService.findAll();
     }
 
     @GetMapping("/{id}")
