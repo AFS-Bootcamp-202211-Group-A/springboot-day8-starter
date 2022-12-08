@@ -7,6 +7,11 @@ public class Employee {
     private String gender;
     private Integer salary;
 
+    public Employee(){}
+    public Employee(Integer age, Integer salary){
+        this.age = age;
+        this.salary = salary;
+    }
     public Employee(Integer id, String name, Integer age, String gender, Integer salary) {
         this.id = id;
         this.name = name;
