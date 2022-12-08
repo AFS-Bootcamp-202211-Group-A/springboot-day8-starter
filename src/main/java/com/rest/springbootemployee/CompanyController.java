@@ -8,38 +8,36 @@ import java.util.List;
 @RestController
 @RequestMapping("/companies")
 public class CompanyController {
-    private CompanyRepository companyRepository;
     private final CompanyService companyService;
 
-    public CompanyController(CompanyRepository CompanyRepository) {
-        this.companyRepository = CompanyRepository;
+    public CompanyController(CompanyRepository companyRepository) {
         this.companyService = new CompanyService(companyRepository);
     }
 
     @GetMapping
     public List<Company> getAll() {
-        return companyRepository.findAll();
+        return companyService.findAll();
     }
 
     @GetMapping("/{id}")
     public Company getById(@PathVariable Integer id) {
-        return companyRepository.findById(id);
+        return companyService.findById(id);
     }
 
     @GetMapping("/{id}/employees")
     public List<Employee> getEmployees(@PathVariable Integer id) {
-        return companyRepository.getEmployees(id);
+        return companyService.getEmployees(id);
     }
 
     @GetMapping(params = {"page", "pageSize"})
     public List<Company> getByPage(Integer page, Integer pageSize) {
-        return companyRepository.findByPage(page, pageSize);
+        return companyService.findByPage(page, pageSize);
     }
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public Company create(@RequestBody Company company) {
-        return companyRepository.create(company);
+        return companyService.create(company);
     }
 
     @PutMapping("/{id}")
@@ -50,6 +48,6 @@ public class CompanyController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCompany(@PathVariable Integer id) {
-        companyRepository.delete(id);
+        companyService.delete(id);
     }
 }
