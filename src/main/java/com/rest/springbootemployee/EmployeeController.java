@@ -10,45 +10,47 @@ import java.util.List;
 public class EmployeeController {
 
     private EmployeeRepository employeeRepository;
+    private EmployeeService employeeService;
 
-    public EmployeeController(EmployeeRepository employeeRepository) {
+    public EmployeeController(EmployeeRepository employeeRepository, EmployeeService employeeService) {
         this.employeeRepository = employeeRepository;
+        this.employeeService = employeeService;
     }
 
     @GetMapping
     public List<Employee> getAll() {
-        return employeeRepository.findAll();
+        return employeeService.findAll();
     }
 
     @GetMapping("/{id}")
     public Employee getById(@PathVariable Integer id) {
-        return employeeRepository.findById(id);
+        return employeeService.findById(id);
     }
 
     @GetMapping(params = {"gender"})
     public List<Employee> getByGender(@RequestParam String gender) {
-        return employeeRepository.findByGender(gender);
+        return employeeService.findByGender(gender);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Employee add(@RequestBody Employee employee) {
-        return employeeRepository.create(employee);
+        return employeeService.create(employee);
     }
     @PutMapping("/{id}")
     public Employee update(@PathVariable Integer id, @RequestBody Employee employee) {
-        return employeeRepository.update(id, employee);
+        return employeeService.update(id, employee);
     }
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Integer id) {
-        employeeRepository.delete(id);
+        employeeService.delete(id);
     }
 
 
     @GetMapping(params = {"page", "pageSize"})
     public List<Employee> getByPage(int page, int pageSize) {
-        return employeeRepository.findByPage(page, pageSize);
+        return employeeService.findByPage(page, pageSize);
     }
 
 }
