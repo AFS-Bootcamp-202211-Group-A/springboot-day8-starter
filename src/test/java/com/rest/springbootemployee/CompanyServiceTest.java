@@ -39,17 +39,15 @@ public class CompanyServiceTest {
     }
 
     @Test
-    void should_update_name_only_when_update_all_given_companies() {
+    void should_update_name_only_when_update_through_service_given_companies() {
         // given
         int companyId = 1;
         Company company = new Company(companyId, "company1", null);
         Company toUpdateCompany = new Company(companyId, "company1_update", null);
-        List<Company> companies = new ArrayList<>();
-        companies.add(company);
         when(companyRepository.findById(companyId)).thenReturn(company);
         // when & then
-        Company updatedCompany = companyService.update(companyId, toUpdateCompany);
-        verify(companyRepository).findById(companyId);
+        Company updatedCompany = companyService.update(company.getId(), toUpdateCompany);
+        verify(companyRepository).findById(company.getId());
         assertEquals(toUpdateCompany.getName(), updatedCompany.getName());
     }
 
