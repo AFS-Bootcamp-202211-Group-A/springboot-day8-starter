@@ -28,10 +28,37 @@ public class EmployeeRepository {
                 .orElseThrow(NoEmployeeFoundException::new);
     }
 
-    public List<Employee> findByGender(String gender) {
+    public List<Employee> findByGender(String gender) throws NoEmployeeFoundException{
         return employees.stream()
                 .filter(employee -> employee.getGender().equals(gender))
                 .collect(Collectors.toList());
+    }
+
+
+
+    public Integer generateNextId() {
+        int maxId = employees.stream()
+                .mapToInt(employee -> employee.getId())
+                .max()
+                .orElse(1);
+        return maxId + 1;
+    }
+
+
+    public void delete(Integer id) throws NoEmployeeFoundException{
+        Employee existingEmployee = findById(id);
+        employees.remove(existingEmployee);
+    }
+
+    public List<Employee> findByPage(int page, int pageSize) throws NoEmployeeFoundException{
+        return employees.stream()
+                .skip((long) (page - 1) * pageSize)
+                .limit(pageSize)
+                .collect(Collectors.toList());
+    }
+
+    public void clearAll(){
+        employees.clear();
     }
 
     public Employee create(Employee employee) {
@@ -40,44 +67,4 @@ public class EmployeeRepository {
         employees.add(employee);
         return employee;
     }
-
-    private Integer generateNextId() {
-        int maxId = employees.stream()
-                .mapToInt(employee -> employee.getId())
-                .max()
-                .orElse(1);
-        return maxId + 1;
-    }
-
-//    requirement: update age and salary
-    public Employee update(Integer id, Employee employee) {
-        Employee existingEmployee = findById(id);
-        if (employee.getAge() != null) {
-            existingEmployee.setAge(employee.getAge());
-        }
-        if (employee.getSalary() != null) {
-            existingEmployee.setSalary(employee.getSalary());
-        }
-        return existingEmployee;
-    }
-
-    public void delete(Integer id) {
-        Employee existingEmployee = findById(id);
-        employees.remove(existingEmployee);
-    }
-
-    public List<Employee> findByPage(int page, int pageSize) {
-        return employees.stream()
-                .skip((long) (page - 1) * pageSize)
-                .limit(pageSize)
-                .collect(Collectors.toList());
-    }
 }
-
-//{
-//        "id": 5,
-//        "name": "Lily",
-//        "age": 20,
-//        "gender": "Female",
-//        "salary": 8000
-//        }

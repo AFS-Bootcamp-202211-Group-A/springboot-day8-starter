@@ -31,7 +31,7 @@ public class CompanyRepository {
         return companies;
     }
 
-    public List<Company> findByPage(int page, int pageSize) {
+    public List<Company> findByPage(int page, int pageSize) throws NoCompanyFoundException{
         return companies.stream()
                 .skip((long) (page - 1) * pageSize)
                 .limit(pageSize)
@@ -45,12 +45,12 @@ public class CompanyRepository {
                 .orElseThrow(NoCompanyFoundException::new);
     }
 
-    public void delete(Integer id) {
+    public void delete(Integer id) throws NoCompanyFoundException{
         Company existingCompany = findById(id);
         companies.remove(existingCompany);
     }
 
-    public List<Employee> getEmployees(Integer id) {
+    public List<Employee> getEmployees(Integer id) throws NoCompanyFoundException{
         return findById(id).getEmployees();
     }
 
@@ -69,11 +69,10 @@ public class CompanyRepository {
         return maxId + 1;
     }
 
-    public Company update(Integer id, Company company) {
-        Company existingCompany = findById(id);
-        if (company.getName() != null) {
-            existingCompany.setName(company.getName());
-        }
-        return existingCompany;
+
+
+    public void clearAll() {
+        companies.clear();
     }
+
 }
