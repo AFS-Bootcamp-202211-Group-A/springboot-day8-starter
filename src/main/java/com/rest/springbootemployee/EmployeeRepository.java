@@ -50,16 +50,6 @@ public class EmployeeRepository {
     }
 
 //    requirement: update age and salary
-    public Employee update(Integer id, Employee employee) {
-        Employee existingEmployee = findById(id);
-        if (employee.getAge() != null) {
-            existingEmployee.setAge(employee.getAge());
-        }
-        if (employee.getSalary() != null) {
-            existingEmployee.setSalary(employee.getSalary());
-        }
-        return existingEmployee;
-    }
 
     public void delete(Integer id) {
         Employee existingEmployee = findById(id);
@@ -72,12 +62,8 @@ public class EmployeeRepository {
                 .limit(pageSize)
                 .collect(Collectors.toList());
     }
-}
 
-//{
-//        "id": 5,
-//        "name": "Lily",
-//        "age": 20,
-//        "gender": "Female",
-//        "salary": 8000
-//        }
+    public void clearAll() {
+        employees.clear();
+    }
+}
